@@ -3,11 +3,10 @@ Demo Data Generator for Misinformation Detection Pipeline
 Creates realistic sample data to demonstrate the full workflow and visualizations
 """
 
+import hashlib
 import json
 import random
 from datetime import datetime, timedelta
-from typing import List, Dict
-import hashlib
 
 
 class DemoDataGenerator:
@@ -151,7 +150,7 @@ class DemoDataGenerator:
         unique_data = f"{username}_created_2023"
         return f"USER_{hashlib.md5(unique_data.encode()).hexdigest()[:8].upper()}"
 
-    def generate_demo_posts(self, num_posts: int = 10) -> List[Dict]:
+    def generate_demo_posts(self, num_posts: int = 10) -> list[dict]:
         """Generate realistic demo posts for the queue"""
         posts = []
 
@@ -208,7 +207,7 @@ class DemoDataGenerator:
 
         return posts
 
-    def generate_annotation_data(self, posts: List[Dict]) -> List[Dict]:
+    def generate_annotation_data(self, posts: list[dict]) -> list[dict]:
         """Generate annotation data for demo posts"""
         annotations = []
         annotators = ["researcher_001", "researcher_002", "expert_003", "community_004"]
@@ -248,7 +247,7 @@ class DemoDataGenerator:
 
         return annotations
 
-    def generate_network_interactions(self, posts: List[Dict]) -> List[Dict]:
+    def generate_network_interactions(self, posts: list[dict]) -> list[dict]:
         """Generate user interaction data for network analysis"""
         interactions = []
         user_ids = list(set(post["study_user_id"] for post in posts))

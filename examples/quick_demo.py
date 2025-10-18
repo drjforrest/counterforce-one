@@ -4,7 +4,6 @@ Quick demonstration of the Health Misinformation Detection Platform
 This script shows basic data collection and analysis capabilities.
 """
 
-import os
 import sys
 from pathlib import Path
 
@@ -13,8 +12,9 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from loguru import logger
-from src.reddit_scraper import RedditScraper
+
 from src.network_analysis import NetworkAnalyzer
+from src.reddit_scraper import RedditScraper
 
 
 def main():
@@ -52,7 +52,7 @@ def main():
             if post.get("is_health_related", False):
                 health_related += 1
 
-        logger.info(f"📈 Demo Statistics:")
+        logger.info("📈 Demo Statistics:")
         logger.info(f"   • Languages detected: {list(languages.keys())}")
         logger.info(f"   • Health-related posts: {health_related}/{len(demo_data)}")
 

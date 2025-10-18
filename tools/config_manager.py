@@ -16,7 +16,7 @@ class ConfigManager:
     def _load_config(self):
         """Load configuration from JSON file"""
         if self.config_file.exists():
-            with open(self.config_file, "r") as f:
+            with open(self.config_file) as f:
                 return json.load(f)
         else:
             # Create default config

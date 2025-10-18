@@ -4,8 +4,8 @@ Scraping Task Manager - Track what's been done and what's pending
 """
 
 import json
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 
 class ScrapingTaskManager:
@@ -18,7 +18,7 @@ class ScrapingTaskManager:
         """Load existing tasks"""
         if self.task_file.exists():
             try:
-                with open(self.task_file, "r") as f:
+                with open(self.task_file) as f:
                     return json.load(f)
             except Exception as e:
                 print(f"Could not load task file: {e}")
@@ -194,7 +194,7 @@ class ScrapingTaskManager:
         pending_tasks = len(self.get_pending_tasks())
         overdue_tasks = len(self.get_overdue_tasks())
 
-        print(f"📊 Task Statistics:")
+        print("📊 Task Statistics:")
         print(f"  Total tasks: {total_tasks}")
         print(f"  Completed: {completed_tasks}")
         print(f"  Pending: {pending_tasks}")

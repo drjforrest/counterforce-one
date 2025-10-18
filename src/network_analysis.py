@@ -2,15 +2,16 @@
 Network analysis module for health misinformation research
 """
 
-import networkx as nx
-import pandas as pd
-from typing import List, Dict, Optional
 import json
 from datetime import datetime
+
+import networkx as nx
+import pandas as pd
 import plotly.graph_objects as go
 from loguru import logger
+
 from src.data_persistence import DataPersistenceManager
-from src.database_models import RedditPost, RedditComment
+from src.database_models import RedditComment, RedditPost
 
 
 class MisinformationNetwork:
@@ -23,7 +24,7 @@ class MisinformationNetwork:
 
     def load_data(self, data_path: str) -> None:
         """Load Reddit data from JSON file"""
-        with open(data_path, "r") as f:
+        with open(data_path) as f:
             raw_data = json.load(f)
 
         # Flatten posts and comments into separate dataframes
@@ -65,7 +66,7 @@ class NetworkAnalyzer:
         self.db_manager = DataPersistenceManager()
         self.graph = nx.DiGraph()
 
-    def build_user_network(self, subreddit_filter: Optional[str] = None) -> Dict:
+    def build_user_network(self, subreddit_filter: str | None = None) -> dict:
         """Build user interaction network from database"""
         with self.db_manager.get_session() as session:
             # Load posts and comments
@@ -123,7 +124,7 @@ class NetworkAnalyzer:
             # Convert to visualization format
             return self._graph_to_vis_data()
 
-    def _graph_to_vis_data(self) -> Dict:
+    def _graph_to_vis_data(self) -> dict:
         """Convert NetworkX graph to visualization data"""
         if not self.graph.nodes():
             return {"nodes": [], "edges": []}
@@ -136,8 +137,8 @@ class NetworkAnalyzer:
             centrality = nx.degree_centrality(self.graph)
             betweenness = nx.betweenness_centrality(self.graph)
         except:
-            centrality = {node: 0 for node in self.graph.nodes()}
-            betweenness = {node: 0 for node in self.graph.nodes()}
+            centrality = dict.fromkeys(self.graph.nodes(), 0)
+            betweenness = dict.fromkeys(self.graph.nodes(), 0)
 
         # Create nodes data
         nodes = []
@@ -171,7 +172,7 @@ class NetworkAnalyzer:
 
         return {"nodes": nodes, "edges": edges}
 
-    def visualize_network(self, network_data: Dict) -> go.Figure:
+    def visualize_network(self, network_data: dict) -> go.Figure:
         """Create interactive network visualization"""
         nodes = network_data.get("nodes", [])
         edges = network_data.get("edges", [])
@@ -337,7 +338,7 @@ class NetworkAnalyzer:
             f"Built network with {self.graph.number_of_nodes()} nodes and {self.graph.number_of_edges()} edges"
         )
 
-    def calculate_network_metrics(self) -> Dict:
+    def calculate_network_metrics(self) -> dict:
         """Calculate key network metrics"""
         metrics = {}
 
@@ -372,8 +373,8 @@ class NetworkAnalyzer:
         return metrics
 
     def identify_misinformation_spreaders(
-        self, misinformation_posts: List[str]
-    ) -> List[Dict]:
+        self, misinformation_posts: list[str]
+    ) -> list[dict]:
         """Identify users who frequently post misinformation"""
 
         # Get authors of misinformation posts
@@ -401,7 +402,7 @@ class NetworkAnalyzer:
 
         return sorted(spreaders, key=lambda x: x["influence_score"], reverse=True)
 
-    def visualize_network(self, highlight_users: List[str] = None) -> go.Figure:
+    def visualize_network(self, highlight_users: list[str] = None) -> go.Figure:
         """Create interactive network visualization"""
 
         # Calculate layout
@@ -484,7 +485,7 @@ class NetworkAnalyzer:
 
         return fig
 
-    def generate_network_report(self) -> Dict:
+    def generate_network_report(self) -> dict:
         """Generate comprehensive network analysis report"""
 
         metrics = self.calculate_network_metrics()

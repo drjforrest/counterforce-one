@@ -4,17 +4,17 @@ Launch the Counterforce-One Demo Showcase Website
 Interactive demonstration of the research project for stakeholder feedback
 """
 
-import os
-import sys
 import json
+import sys
 from pathlib import Path
 
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
+from loguru import logger
+
 import gradio as gr
 import pandas as pd
-from loguru import logger
 
 # Paths
 VIZ_DIR = project_root / "data" / "demo_visualizations"
@@ -24,11 +24,11 @@ HIGHLIGHT_DIR = project_root / "data" / "demo_highlight_reel"
 def load_project_data():
     """Load all project data for showcase"""
     # Load dataset stats
-    with open(VIZ_DIR / "dataset_stats.json", 'r') as f:
+    with open(VIZ_DIR / "dataset_stats.json") as f:
         stats = json.load(f)
 
     # Load post summaries
-    with open(VIZ_DIR / "post_summaries.json", 'r') as f:
+    with open(VIZ_DIR / "post_summaries.json") as f:
         post_summaries = json.load(f)
 
     # Load annotations
@@ -90,15 +90,15 @@ def create_hero_section(stats):
 def create_post_card(post):
     """Create formatted card for a key post"""
     severity_colors = {1: "green", 2: "yellow", 3: "orange", 4: "red", 5: "darkred"}
-    severity_color = severity_colors.get(post['severity'], "gray")
+    severity_color = severity_colors.get(post["severity"], "gray")
 
     accuracy_emoji = {
         "accurate": "✅",
         "partially_accurate": "⚠️",
         "inaccurate": "❌",
-        "not_applicable": "➖"
+        "not_applicable": "➖",
     }
-    emoji = accuracy_emoji.get(post['accuracy_label'], "")
+    emoji = accuracy_emoji.get(post["accuracy_label"], "")
 
     return f"""
 ### {emoji} {post['title']}
@@ -234,7 +234,7 @@ def create_demo_interface():
         h1 {color: #2c3e50;}
         h2 {color: #34495e; margin-top: 30px;}
         .post-card {background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;}
-        """
+        """,
     ) as demo:
         # Hero section
         gr.Markdown(create_hero_section(stats))
@@ -243,7 +243,7 @@ def create_demo_interface():
         gr.HTML("<h2>📈 Subreddit Distribution</h2>")
         gr.HTML(
             (VIZ_DIR / "subreddit_distribution.html").read_text(),
-            label="Top Subreddits"
+            label="Top Subreddits",
         )
 
         # Key posts section
@@ -262,7 +262,9 @@ def create_demo_interface():
         # Tabs for each post
         with gr.Tabs():
             for post in post_summaries:
-                with gr.Tab(f"Post {post_summaries.index(post) + 1}: {post['title'][:50]}..."):
+                with gr.Tab(
+                    f"Post {post_summaries.index(post) + 1}: {post['title'][:50]}..."
+                ):
                     gr.Markdown(create_post_card(post), elem_classes="post-card")
 
                     # Network visualization
@@ -358,7 +360,7 @@ def main():
         server_name="0.0.0.0",  # Allow external access
         server_port=7860,
         share=False,  # Set to True to get public link for sharing
-        show_error=True
+        show_error=True,
     )
 
 

@@ -6,11 +6,10 @@ Create Date: 2025-09-04 15:09:57.265731
 
 """
 
-from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import postgresql
 from pgvector.sqlalchemy import Vector
 
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "a6da6b6a31aa"

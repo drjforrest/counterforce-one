@@ -11,16 +11,15 @@ This script handles:
 - Rate limiting and respectful API usage
 """
 
+import argparse
+import glob
 import json
 import os
 import sys
 import time
 import traceback
-import argparse
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict
-import glob
 
 from loguru import logger
 
@@ -107,7 +106,7 @@ class AutomatedCollector:
             logger.error(f"Environment validation failed: {e}")
             return False
 
-    def run_collection_cycle(self) -> Dict[str, any]:
+    def run_collection_cycle(self) -> dict[str, any]:
         """
         Run a single data collection cycle
 
@@ -226,7 +225,7 @@ class AutomatedCollector:
             results["duration_seconds"] = (datetime.now() - cycle_start).total_seconds()
             return results
 
-    def save_collection_report(self, results: Dict) -> str:
+    def save_collection_report(self, results: dict) -> str:
         """Save detailed collection report to file"""
         try:
             os.makedirs("data/reports", exist_ok=True)
@@ -253,7 +252,7 @@ class AutomatedCollector:
             logger.error(f"Failed to save collection report: {e}")
             return ""
 
-    def save_summary_report(self, results: Dict, timestamp: str) -> str:
+    def save_summary_report(self, results: dict, timestamp: str) -> str:
         """Save human-readable summary report"""
         try:
             summary_path = f"data/reports/collection_summary_{timestamp}.md"
@@ -422,7 +421,7 @@ Generated: {results['start_time'].strftime('%Y-%m-%d %H:%M:%S')}
                     report_date = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S")
 
                     if report_date >= cutoff_date:
-                        with open(report_file, "r") as f:
+                        with open(report_file) as f:
                             report_data = json.load(f)
                             report_data["report_file"] = report_file
                             recent_reports.append(report_data)

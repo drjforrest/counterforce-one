@@ -6,7 +6,6 @@ Gamified design for research team engagement
 import os
 import sqlite3
 from datetime import datetime
-from typing import Dict, Optional
 
 import gradio as gr
 from loguru import logger
@@ -19,7 +18,7 @@ from src.database_models import RedditComment, RedditPost
 class AnnotationInterface:
     """Gamified Gradio interface for post annotation"""
 
-    def __init__(self, limit: int = 100, filter_criteria: Optional[Dict] = None):
+    def __init__(self, limit: int = 100, filter_criteria: dict | None = None):
         """
         Initialize annotation interface with database-driven data loading
 
@@ -170,14 +169,14 @@ class AnnotationInterface:
         conn.commit()
         conn.close()
 
-    def get_current_post(self) -> Dict:
+    def get_current_post(self) -> dict:
         """Get the current post for annotation"""
         if self.current_post_index >= len(self.posts_data):
             return {"error": "No more posts to annotate!"}
 
         return self.posts_data[self.current_post_index]
 
-    def _format_language_info(self, post: Dict) -> str:
+    def _format_language_info(self, post: dict) -> str:
         """Format language and translation status information"""
         language = post.get("language", "unknown")
         language_display = f"**Language:** {language}"
@@ -206,7 +205,7 @@ class AnnotationInterface:
 
         return language_display
 
-    def _format_translation_display(self, post: Dict) -> str:
+    def _format_translation_display(self, post: dict) -> str:
         """Format translation content if available"""
         if post.get("english_translation") and post.get("language") not in [
             "en",

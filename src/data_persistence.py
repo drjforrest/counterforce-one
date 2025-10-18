@@ -5,7 +5,6 @@ Handles database operations with proper duplicate detection and upsert logic
 
 import json
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
 
 from loguru import logger
 from sqlalchemy import create_engine, text
@@ -19,7 +18,7 @@ from src.database_models import Base, PostAnnotation, RedditComment, RedditPost
 class DataPersistenceManager:
     """Handles all database persistence operations with duplicate management"""
 
-    def __init__(self, database_url: Optional[str] = None):
+    def __init__(self, database_url: str | None = None):
         """Initialize database connection"""
         self.database_url = database_url or Config.DATABASE_URL
         self.engine = create_engine(self.database_url)
@@ -52,7 +51,7 @@ class DataPersistenceManager:
                 is not None
             )
 
-    def get_existing_post_ids(self, post_ids: List[str]) -> List[str]:
+    def get_existing_post_ids(self, post_ids: list[str]) -> list[str]:
         """Get list of post IDs that already exist in database"""
         with self.get_session() as session:
             existing = (
@@ -62,7 +61,7 @@ class DataPersistenceManager:
             )
             return [row[0] for row in existing]
 
-    def save_post(self, post_data: Dict) -> Tuple[bool, str]:
+    def save_post(self, post_data: dict) -> tuple[bool, str]:
         """
         Save a single post to database with upsert logic
 
@@ -140,8 +139,8 @@ class DataPersistenceManager:
                 return False, f"Error: {str(e)}"
 
     def save_comment(
-        self, comment_data: Dict, session: Optional[Session] = None
-    ) -> Tuple[bool, str]:
+        self, comment_data: dict, session: Session | None = None
+    ) -> tuple[bool, str]:
         """
         Save a single comment to database with upsert logic
 
@@ -201,7 +200,7 @@ class DataPersistenceManager:
             if should_close_session:
                 session.close()
 
-    def bulk_save_posts(self, posts_data: List[Dict]) -> Dict[str, int]:
+    def bulk_save_posts(self, posts_data: list[dict]) -> dict[str, int]:
         """
         Save multiple posts to database with duplicate handling
 
@@ -245,7 +244,7 @@ class DataPersistenceManager:
         logger.info(f"Bulk save complete: {stats}")
         return stats
 
-    def load_and_save_json_data(self, json_file_path: str) -> Dict[str, int]:
+    def load_and_save_json_data(self, json_file_path: str) -> dict[str, int]:
         """
         Load Reddit data from JSON file and save to database
 
@@ -256,7 +255,7 @@ class DataPersistenceManager:
             Dictionary with save statistics
         """
         try:
-            with open(json_file_path, "r") as f:
+            with open(json_file_path) as f:
                 posts_data = json.load(f)
 
             logger.info(f"Loaded {len(posts_data)} posts from {json_file_path}")
@@ -266,7 +265,7 @@ class DataPersistenceManager:
             logger.error(f"Error loading data from {json_file_path}: {e}")
             return {"saved": 0, "updated": 0, "skipped": 0, "errors": 1}
 
-    def get_collection_stats(self) -> Dict[str, int]:
+    def get_collection_stats(self) -> dict[str, int]:
         """Get current database collection statistics"""
         with self.get_session() as session:
             try:

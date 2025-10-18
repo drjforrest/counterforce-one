@@ -11,11 +11,13 @@ import sys
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
-from gradio_app.enhanced_annotation_interface import EnhancedAnnotationInterface
 from loguru import logger
 
+from gradio_app.enhanced_annotation_interface import EnhancedAnnotationInterface
+
 # The 4 key posts for demo
-KEY_DEMO_POSTS = ['1ls1tyz', '1lyphrb', '1la8c64', '1lhs70z']
+KEY_DEMO_POSTS = ["1ls1tyz", "1lyphrb", "1la8c64", "1lhs70z"]
+
 
 def main():
     """Launch annotation interface for demo posts only"""
@@ -27,7 +29,9 @@ def main():
     print("   1. 'U=U, 100%!' - Accurate health info (341 comments)")
     print("   2. 'HIV is life altering...' - Potential misinfo (216 comments)")
     print("   3. 'was recently diagnosed' - Support seeking (164 comments)")
-    print("   4. 'prep exists folks weird about condoms' - Risk discussion (156 comments)")
+    print(
+        "   4. 'prep exists folks weird about condoms' - Risk discussion (156 comments)"
+    )
     print()
     print("🌐 Interface will open at: http://localhost:7861")
     print()
@@ -47,7 +51,7 @@ def main():
 
         interface = EnhancedAnnotationInterface(
             limit=50,  # Small limit to make finding our posts easier
-            filter_criteria={'subreddit': 'gaybros'}  # All 4 posts are in gaybros
+            filter_criteria={"subreddit": "gaybros"},  # All 4 posts are in gaybros
         )
 
         print("✅ Interface initialized!")
@@ -62,9 +66,12 @@ def main():
         print("❌ Error launching Gradio interface")
         print()
         print("📝 Alternative: Use CSV annotation template instead")
-        print(f"   File: {project_root}/data/demo_highlight_reel/annotation_template_posts.csv")
+        print(
+            f"   File: {project_root}/data/demo_highlight_reel/annotation_template_posts.csv"
+        )
         print(f"   Guide: {project_root}/data/demo_highlight_reel/ANNOTATION_GUIDE.md")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

@@ -3,23 +3,23 @@ Research Visualizations for Health Misinformation Detection Platform
 Comprehensive visualization system for data analysis and research insights
 """
 
-import plotly.graph_objects as go
-import plotly.express as px
-from plotly.subplots import make_subplots
-import pandas as pd
-import numpy as np
 import json
 import sqlite3
-from datetime import datetime
-from typing import Dict, Optional
 from collections import Counter
+from datetime import datetime
+
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 from loguru import logger
+from plotly.subplots import make_subplots
 
 
 class ResearchVisualizations:
     """Comprehensive visualization system for research analysis"""
 
-    def __init__(self, data_path: Optional[str] = None):
+    def __init__(self, data_path: str | None = None):
         self.data_path = data_path
         self.data = None
         self.annotations_db = "data/enhanced_annotations.db"
@@ -41,7 +41,7 @@ class ResearchVisualizations:
     def load_data(self) -> None:
         """Load Reddit data from JSON file"""
         if self.data_path and self.data_path.endswith(".json"):
-            with open(self.data_path, "r") as f:
+            with open(self.data_path) as f:
                 self.data = json.load(f)
             logger.info(f"Loaded {len(self.data)} posts for visualization")
 
@@ -231,7 +231,7 @@ class ResearchVisualizations:
         return fig
 
     def create_network_visualization(
-        self, network_data: Optional[Dict] = None
+        self, network_data: dict | None = None
     ) -> go.Figure:
         """Create interactive network visualization"""
         if not network_data and self.data:
@@ -613,7 +613,7 @@ class ResearchVisualizations:
             text = (post["title"] + " " + post.get("selftext", "")).lower()
 
             if subreddit not in subreddit_keywords:
-                subreddit_keywords[subreddit] = {category: 0 for category in keywords}
+                subreddit_keywords[subreddit] = dict.fromkeys(keywords, 0)
 
             for category, terms in keywords.items():
                 if any(term in text for term in terms):
@@ -749,7 +749,7 @@ class ResearchVisualizations:
 
         return fig
 
-    def _build_network_from_data(self) -> Dict:
+    def _build_network_from_data(self) -> dict:
         """Build a simple network structure from post data"""
         nodes = []
         edges = []
@@ -796,7 +796,7 @@ class ResearchVisualizations:
 
     def save_all_visualizations(
         self, output_dir: str = "visualizations"
-    ) -> Dict[str, str]:
+    ) -> dict[str, str]:
         """Generate and save all visualizations"""
         import os
 

@@ -6,12 +6,12 @@ Extends the base Reddit scraper to handle multiple languages
 
 import time
 from datetime import datetime
-from typing import List, Dict
+
 from loguru import logger
 
+from config.settings import Config
 from src.reddit_scraper import RedditScraper
 from src.translation_service import get_translation_service
-from config.settings import Config
 
 
 class MultilingualRedditScraper(RedditScraper):
@@ -105,7 +105,7 @@ class MultilingualRedditScraper(RedditScraper):
 
     def scrape_subreddit_multilingual(
         self, subreddit_name: str, limit: int = None, skip_existing: bool = True
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """
         Enhanced scraping with multilingual support and translation caching
         """
@@ -230,7 +230,7 @@ class MultilingualRedditScraper(RedditScraper):
             logger.error(f"Error in multilingual scraping r/{subreddit_name}: {e}")
             return []
 
-    def extract_comments_multilingual(self, post) -> List[Dict]:
+    def extract_comments_multilingual(self, post) -> list[dict]:
         """Extract comments with multilingual translation support"""
         comments_data = []
 
@@ -307,7 +307,7 @@ class MultilingualRedditScraper(RedditScraper):
 
     def collect_all_data_multilingual(
         self, save_to_database: bool = None
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """Collect multilingual data from all target subreddits with performance monitoring"""
         if save_to_database is None:
             save_to_database = self.enable_database
@@ -351,7 +351,7 @@ class MultilingualRedditScraper(RedditScraper):
 
         return all_posts
 
-    def _initialize_detailed_stats(self) -> Dict:
+    def _initialize_detailed_stats(self) -> dict:
         """Initialize detailed statistics tracking"""
         return {
             "total_posts": 0,
@@ -364,7 +364,7 @@ class MultilingualRedditScraper(RedditScraper):
             "processing_time": datetime.now(),
         }
 
-    def _analyze_posts_stats(self, posts: List[Dict]) -> Dict:
+    def _analyze_posts_stats(self, posts: list[dict]) -> dict:
         """Analyze posts for detailed statistics"""
         stats = {
             "post_count": len(posts),
@@ -407,7 +407,7 @@ class MultilingualRedditScraper(RedditScraper):
         return stats
 
     def _update_detailed_stats(
-        self, detailed_stats: Dict, subreddit_stats: Dict, subreddit: str
+        self, detailed_stats: dict, subreddit_stats: dict, subreddit: str
     ):
         """Update detailed statistics with subreddit data"""
         # Update totals
@@ -438,7 +438,7 @@ class MultilingualRedditScraper(RedditScraper):
         # Store subreddit breakdown
         detailed_stats["subreddit_breakdown"][subreddit] = subreddit_stats
 
-    def _save_performance_report(self, detailed_stats: Dict, timestamp: str):
+    def _save_performance_report(self, detailed_stats: dict, timestamp: str):
         """Save detailed performance report as JSON"""
         import json
 
@@ -477,8 +477,8 @@ class MultilingualRedditScraper(RedditScraper):
 
     def _log_collection_results(
         self,
-        all_posts: List[Dict],
-        detailed_stats: Dict,
+        all_posts: list[dict],
+        detailed_stats: dict,
         filename: str,
         save_to_database: bool,
     ):

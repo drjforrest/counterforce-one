@@ -5,6 +5,7 @@ Update progress tracking with latest collection data
 
 import json
 from pathlib import Path
+
 from track_progress import ScrapingProgressTracker
 
 
@@ -23,7 +24,7 @@ def update_progress_from_latest_collection():
     print(f"Updating progress from: {latest_report.name}")
 
     # Load the report
-    with open(latest_report, "r") as f:
+    with open(latest_report) as f:
         report_data = json.load(f)
 
     # Initialize tracker
@@ -56,7 +57,7 @@ def update_progress_from_latest_collection():
     # Save progress
     tracker.save_progress()
 
-    print(f"✅ Updated progress tracking:")
+    print("✅ Updated progress tracking:")
     print(f"  • Added {posts_added} posts")
     print(f"  • Detected {len(languages)} languages")
     print(f"  • Covered {len(subreddits)} subreddits")

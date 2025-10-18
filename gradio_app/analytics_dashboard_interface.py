@@ -4,13 +4,13 @@ Gradio Dashboard Interface for Health Misinformation Research Analytics
 Provides interactive visualizations and insights for research teams
 """
 
+from datetime import datetime
+
 import gradio as gr
 import plotly.express as px
-from datetime import datetime
-from typing import Tuple
 
-from src.analytics_dashboard import HealthMisinformationAnalytics
 from config.settings import Config
+from src.analytics_dashboard import HealthMisinformationAnalytics
 
 
 class AnalyticsDashboardInterface:
@@ -301,7 +301,7 @@ class AnalyticsDashboardInterface:
 
         return table_md
 
-    def export_report(self) -> Tuple[str, str]:
+    def export_report(self) -> tuple[str, str]:
         """Export comprehensive analytics report"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_path = f"data/analytics_report_{timestamp}.json"

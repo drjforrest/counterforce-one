@@ -3,8 +3,8 @@ Health Information Quality Assessment Module
 For analyzing the quality and helpfulness of community-shared health information
 """
 
-from typing import Dict, List, Optional
 from collections import defaultdict
+
 import numpy as np
 
 from src.data_persistence import DataPersistenceManager
@@ -151,7 +151,7 @@ class HealthInfoQualityAnalyzer:
             ],
         }
 
-    def assess_post_quality(self, post_text: str) -> Dict[str, float]:
+    def assess_post_quality(self, post_text: str) -> dict[str, float]:
         """Assess the quality of health information in a post"""
         text = post_text.lower()
         quality_scores = {}
@@ -209,7 +209,7 @@ class HealthInfoQualityAnalyzer:
 
         return quality_scores
 
-    def analyze_community_info_quality(self, subreddit: Optional[str] = None) -> Dict:
+    def analyze_community_info_quality(self, subreddit: str | None = None) -> dict:
         """Analyze information quality patterns across communities"""
         with self.db_manager.get_session() as session:
             # Load posts
@@ -272,7 +272,7 @@ class HealthInfoQualityAnalyzer:
                 },
             }
 
-    def identify_helpful_content_patterns(self) -> Dict:
+    def identify_helpful_content_patterns(self) -> dict:
         """Identify patterns in helpful health content"""
         analysis = self.analyze_community_info_quality()
 
@@ -343,7 +343,7 @@ class HealthInfoQualityAnalyzer:
 
     def generate_quality_improvement_suggestions(
         self, community: str = None
-    ) -> List[str]:
+    ) -> list[str]:
         """Generate suggestions for improving health information quality"""
         patterns = self.identify_helpful_content_patterns()
 

@@ -3,8 +3,9 @@
 Update task manager with completed tasks and new tasks
 """
 
-from task_manager import ScrapingTaskManager
 from datetime import datetime
+
+from task_manager import ScrapingTaskManager
 
 
 def update_tasks():

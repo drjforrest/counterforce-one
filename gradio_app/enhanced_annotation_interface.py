@@ -7,7 +7,6 @@ import json
 import os
 import sqlite3
 from datetime import datetime
-from typing import Dict, Optional
 
 import gradio as gr
 from loguru import logger
@@ -21,7 +20,7 @@ from src.research_expertise_tracker import ResearchExpertiseTracker
 class EnhancedAnnotationInterface:
     """Enhanced Gradio interface supporting full schema capabilities"""
 
-    def __init__(self, limit: int = 100, filter_criteria: Optional[Dict] = None):
+    def __init__(self, limit: int = 100, filter_criteria: dict | None = None):
         """
         Initialize enhanced annotation interface with database-driven data loading
 
@@ -208,14 +207,14 @@ class EnhancedAnnotationInterface:
         conn.commit()
         conn.close()
 
-    def get_current_post(self) -> Dict:
+    def get_current_post(self) -> dict:
         """Get the current post for annotation"""
         if self.current_post_index >= len(self.posts_data):
             return {"error": "No more posts to annotate!"}
 
         return self.posts_data[self.current_post_index]
 
-    def analyze_language_patterns(self, text: str) -> Dict:
+    def analyze_language_patterns(self, text: str) -> dict:
         """Analyze language patterns in the text"""
         patterns = {
             "detected_languages": [],
@@ -407,7 +406,7 @@ class EnhancedAnnotationInterface:
 
         return f"✅ Enhanced annotation saved! Post {self.session_stats['posts_reviewed']} completed."
 
-    def calculate_cultural_competency(self, lang_analysis: Dict) -> float:
+    def calculate_cultural_competency(self, lang_analysis: dict) -> float:
         """Calculate cultural competency score based on language analysis"""
         score = 0.0
         if lang_analysis["detected_languages"]:

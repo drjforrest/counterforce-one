@@ -3,9 +3,10 @@ Simple proof-of-concept demonstration script
 Run this to quickly test the core functionality
 """
 
-from src.reddit_scraper import RedditScraper
 import json
 from datetime import datetime
+
+from src.reddit_scraper import RedditScraper
 
 
 def run_proof_of_concept():

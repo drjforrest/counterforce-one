@@ -5,8 +5,9 @@ Analyze the performance of the complete ML pipeline
 
 import json
 from datetime import datetime
+
 from src.data_persistence import DataPersistenceManager
-from src.database_models import RedditPost, RedditComment
+from src.database_models import RedditComment, RedditPost
 
 
 def analyze_pipeline_performance():
@@ -22,12 +23,12 @@ def analyze_pipeline_performance():
     total_posts = session.query(RedditPost).count()
     total_comments = session.query(RedditComment).count()
 
-    print(f"📊 Database Statistics:")
+    print("📊 Database Statistics:")
     print(f"  Total posts: {total_posts}")
     print(f"  Total comments: {total_comments}")
 
     # Analyze by subreddit
-    print(f"\n📋 Posts by Subreddit:")
+    print("\n📋 Posts by Subreddit:")
     subreddit_counts = (
         session.query(
             RedditPost.subreddit,
@@ -52,7 +53,7 @@ def analyze_pipeline_performance():
         print(f"  r/{subreddit}: {count} posts")
 
     # Analyze languages
-    print(f"\n🌐 Language Distribution:")
+    print("\n🌐 Language Distribution:")
     languages = {}
     for post in session.query(RedditPost).all():
         lang = post.language or "unknown"
@@ -64,7 +65,7 @@ def analyze_pipeline_performance():
         print(f"  {language}: {count} posts")
 
     # Check for translations
-    print(f"\n🔄 Translation Statistics:")
+    print("\n🔄 Translation Statistics:")
     translated_posts = (
         session.query(RedditPost)
         .filter(RedditPost.english_translation.isnot(None))
@@ -73,7 +74,7 @@ def analyze_pipeline_performance():
     print(f"  Posts with translations: {translated_posts}")
 
     # Sample recent posts for manual review
-    print(f"\n📝 Recent Posts Sample:")
+    print("\n📝 Recent Posts Sample:")
     recent_posts = (
         session.query(RedditPost).order_by(RedditPost.created_utc.desc()).limit(5).all()
     )
@@ -83,9 +84,9 @@ def analyze_pipeline_performance():
         print(f"     Language: {post.language}, Score: {post.score}")
 
     # Performance Summary
-    print(f"\n" + "=" * 50)
-    print(f"🎯 Pipeline Performance Summary")
-    print(f"=" * 50)
+    print("\n" + "=" * 50)
+    print("🎯 Pipeline Performance Summary")
+    print("=" * 50)
 
     # Calculate success metrics
     multilingual_coverage = len(
@@ -93,7 +94,7 @@ def analyze_pipeline_performance():
     )
     subreddit_coverage = len(subreddits)
 
-    print(f"✅ Data Collection:")
+    print("✅ Data Collection:")
     print(f"  Total posts collected: {total_posts}")
     print(f"  Total comments collected: {total_comments}")
     print(f"  Unique subreddits: {subreddit_coverage}")
@@ -117,34 +118,34 @@ def analyze_pipeline_performance():
     if posts_with_content > 0:
         avg_post_length = avg_post_length / posts_with_content
 
-    print(f"\n✅ Data Quality:")
+    print("\n✅ Data Quality:")
     print(f"  Average post content length: {avg_post_length:.0f} characters")
     print(f"  Posts with substantial content: {posts_with_content}/100 sampled")
 
     # ML Pipeline Status
-    print(f"\n✅ ML Pipeline Status:")
-    print(f"  Health Content Classifier: ✅ Trained and Available")
-    print(f"  LGBTQ+ Content Classifier: ✅ Trained and Available")
-    print(f"  Translation Service: ✅ Operational (Google Translate + MyMemory)")
-    print(f"  Database Persistence: ✅ Working with pgvector support")
+    print("\n✅ ML Pipeline Status:")
+    print("  Health Content Classifier: ✅ Trained and Available")
+    print("  LGBTQ+ Content Classifier: ✅ Trained and Available")
+    print("  Translation Service: ✅ Operational (Google Translate + MyMemory)")
+    print("  Database Persistence: ✅ Working with pgvector support")
 
     # Recommendations
-    print(f"\n💡 Recommendations:")
+    print("\n💡 Recommendations:")
 
     if multilingual_coverage < 3:
-        print(f"  📈 Expand to more language-specific communities")
+        print("  📈 Expand to more language-specific communities")
     else:
-        print(f"  ✅ Good multilingual coverage achieved")
+        print("  ✅ Good multilingual coverage achieved")
 
     if translated_posts < 5:
-        print(f"  📈 Target more non-English content for translation testing")
+        print("  📈 Target more non-English content for translation testing")
     else:
-        print(f"  ✅ Translation pipeline is being utilized")
+        print("  ✅ Translation pipeline is being utilized")
 
     if total_posts < 500:
-        print(f"  📈 Consider increasing collection limits for larger dataset")
+        print("  📈 Consider increasing collection limits for larger dataset")
     else:
-        print(f"  ✅ Good dataset size achieved")
+        print("  ✅ Good dataset size achieved")
 
     # Save report
     report = {

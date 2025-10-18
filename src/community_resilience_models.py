@@ -2,17 +2,18 @@
 Database models for Community Resilience & Social Capital Analysis
 """
 
+from datetime import datetime
+
 from sqlalchemy import (
+    JSON,
+    Boolean,
     Column,
+    DateTime,
+    Float,
     Integer,
     String,
     Text,
-    DateTime,
-    Boolean,
-    Float,
-    JSON,
 )
-from datetime import datetime
 
 from src.database_models import Base
 

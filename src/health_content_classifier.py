@@ -4,22 +4,23 @@ Health Content Classification ML Pipeline
 Trains a real ML model to classify posts as health-related vs general discussion
 """
 
+import logging
+import pickle
+import re
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 import pandas as pd
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-import pickle
-import re
-from typing import Tuple, Dict, List, Any
-from pathlib import Path
-import logging
-from datetime import datetime
 
-from src.data_persistence import DataPersistenceManager
-from src.database_models import RedditPost, RedditComment
 from config.settings import ResearchConfig
+from src.data_persistence import DataPersistenceManager
+from src.database_models import RedditComment, RedditPost
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -168,7 +169,7 @@ class HealthContentClassifier:
 
         return text.strip()
 
-    def train_model(self, df: pd.DataFrame) -> Dict[str, Any]:
+    def train_model(self, df: pd.DataFrame) -> dict[str, Any]:
         """Train the health content classification model"""
         logger.info("Training health content classifier...")
 
@@ -251,7 +252,7 @@ class HealthContentClassifier:
 
         return results
 
-    def predict_health_content(self, texts: List[str]) -> List[Dict[str, Any]]:
+    def predict_health_content(self, texts: list[str]) -> list[dict[str, Any]]:
         """Predict whether texts are health-related"""
         if not self.pipeline:
             raise ValueError("Model not trained yet. Call train_model() first.")
@@ -261,7 +262,7 @@ class HealthContentClassifier:
         probabilities = self.pipeline.predict_proba(processed_texts)
 
         results = []
-        for i, (text, pred, prob) in enumerate(zip(texts, predictions, probabilities)):
+        for i, (text, pred, prob) in enumerate(zip(texts, predictions, probabilities, strict=False)):
             results.append(
                 {
                     "text": text[:200] + "..." if len(text) > 200 else text,
@@ -274,7 +275,7 @@ class HealthContentClassifier:
 
         return results
 
-    def get_top_health_features(self, n: int = 20) -> List[Tuple[str, float]]:
+    def get_top_health_features(self, n: int = 20) -> list[tuple[str, float]]:
         """Get the most important features for health classification"""
         if not self.pipeline:
             return []
@@ -283,7 +284,7 @@ class HealthContentClassifier:
         coefficients = self.pipeline.named_steps["classifier"].coef_[0]
 
         # Get top positive coefficients (health-related features)
-        feature_importance = list(zip(feature_names, coefficients))
+        feature_importance = list(zip(feature_names, coefficients, strict=False))
         feature_importance.sort(key=lambda x: x[1], reverse=True)
 
         return feature_importance[:n]

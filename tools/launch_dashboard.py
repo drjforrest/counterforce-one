@@ -53,6 +53,7 @@ def main():
 
         # Launch analytics dashboard in background
         import threading
+
         from gradio_app.analytics_dashboard_interface import AnalyticsDashboardInterface
         from gradio_app.enhanced_annotation_interface import EnhancedAnnotationInterface
 

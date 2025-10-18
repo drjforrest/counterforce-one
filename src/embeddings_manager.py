@@ -2,18 +2,18 @@
 Embeddings and semantic analysis module using pgvector
 """
 
-import numpy as np
-from sentence_transformers import SentenceTransformer
-from typing import List, Dict, Tuple
-from sqlalchemy.orm import Session
-from sqlalchemy import text
-from loguru import logger
 
+import numpy as np
+from loguru import logger
+from sentence_transformers import SentenceTransformer
+from sqlalchemy import text
+from sqlalchemy.orm import Session
+
+from config.settings import Config
 from src.database_models_vector import (
     RedditPost,
     SimilarContent,
 )
-from config.settings import Config
 
 
 class EmbeddingsManager:
@@ -67,7 +67,7 @@ class EmbeddingsManager:
 
     def find_similar_posts(
         self, session: Session, post_id: str, threshold: float = 0.7, limit: int = 10
-    ) -> List[Tuple[str, float]]:
+    ) -> list[tuple[str, float]]:
         """Find semantically similar posts using vector similarity"""
 
         # Get the target post's embedding
@@ -104,8 +104,8 @@ class EmbeddingsManager:
         return [(row.post_id, row.similarity) for row in results]
 
     def cluster_misinformation_posts(
-        self, session: Session, misinformation_post_ids: List[str], n_clusters: int = 5
-    ) -> Dict:
+        self, session: Session, misinformation_post_ids: list[str], n_clusters: int = 5
+    ) -> dict:
         """Cluster misinformation posts by semantic similarity"""
 
         from sklearn.cluster import KMeans
@@ -166,7 +166,7 @@ class EmbeddingsManager:
 
     def detect_misinformation_propagation(
         self, session: Session, source_post_id: str, time_window_hours: int = 72
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """Detect potential misinformation propagation through semantic similarity"""
 
         source_post = (
@@ -233,7 +233,7 @@ class EmbeddingsManager:
 
     def search_by_semantic_query(
         self, session: Session, query_text: str, limit: int = 20, threshold: float = 0.6
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """Search posts using semantic similarity to a text query"""
 
         # Generate embedding for search query

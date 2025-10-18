@@ -4,18 +4,19 @@ Creates interactive visualizations to demonstrate system capabilities
 """
 
 import json
-import pandas as pd
+
 import matplotlib.pyplot as plt
-import seaborn as sns
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import networkx as nx
 import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+import seaborn as sns
+from plotly.subplots import make_subplots
 
 
 class DemoVisualizationDashboard:
     def __init__(self, demo_data_file: str = "demo_dataset.json"):
-        with open(demo_data_file, "r") as f:
+        with open(demo_data_file) as f:
             self.data = json.load(f)
 
         self.posts_df = pd.DataFrame(self.data["posts"])

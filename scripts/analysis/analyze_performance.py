@@ -19,7 +19,7 @@ def analyze_performance():
         print("❌ No collection report found")
         return
 
-    with open(report_file, "r") as f:
+    with open(report_file) as f:
         data = json.load(f)
 
     # Overall statistics
@@ -28,14 +28,14 @@ def analyze_performance():
     languages = data["language_distribution"]
     translation_stats = data["translation_stats"]
 
-    print(f"📈 Overall Collection Statistics:")
+    print("📈 Overall Collection Statistics:")
     print(f"  • Total posts collected: {total_posts}")
     print(
         f"  • Health-related posts: {health_posts} ({health_posts/total_posts*100:.1f}%)"
     )
     print(f"  • Languages detected: {len(languages)}")
 
-    print(f"\n🌍 Language Distribution:")
+    print("\n🌍 Language Distribution:")
     for lang, count in sorted(languages.items(), key=lambda x: x[1], reverse=True):
         print(f"  • {lang}: {count} posts ({count/total_posts*100:.1f}%)")
 
@@ -43,14 +43,14 @@ def analyze_performance():
     total_translations = sum(translation_stats.values())
     if total_translations > 0:
         success_rate = translation_stats["success"] / total_translations * 100
-        print(f"\n🔄 Translation Performance:")
+        print("\n🔄 Translation Performance:")
         print(f"  • Success rate: {success_rate:.1f}%")
         print(f"  • Successful translations: {translation_stats['success']}")
         print(f"  • Failed translations: {translation_stats['failed']}")
         print(f"  • Cached translations: {translation_stats['cached']}")
 
     # Per-subreddit analysis
-    print(f"\n🏆 Top Performing Subreddits:")
+    print("\n🏆 Top Performing Subreddits:")
     subreddit_stats = data["subreddit_stats"]
     top_subreddits = sorted(
         subreddit_stats.items(),
@@ -64,7 +64,7 @@ def analyze_performance():
         )
 
     # Language-specific translation quality
-    print(f"\nQuality Analysis by Language:")
+    print("\nQuality Analysis by Language:")
     language_quality = {}
 
     for subreddit, stats in subreddit_stats.items():
@@ -95,7 +95,7 @@ def analyze_performance():
         else:
             print(f"  • {lang}: {quality['posts']} posts")
 
-    print(f"\n✅ Analysis complete!")
+    print("\n✅ Analysis complete!")
 
 
 if __name__ == "__main__":

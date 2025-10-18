@@ -4,10 +4,10 @@ Project Reorganization Script
 Separates demo/proof-of-concept files from production components
 """
 
+import json
 import os
 import shutil
 from pathlib import Path
-import json
 
 
 def create_directories():
@@ -66,7 +66,7 @@ def update_main_imports():
         print(f"⚠️  {main_file} not found")
         return
 
-    with open(main_file, "r") as f:
+    with open(main_file) as f:
         content = f.read()
 
     # Update import path for proof_of_concept

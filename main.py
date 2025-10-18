@@ -6,7 +6,6 @@ import argparse
 import json
 import os
 from datetime import datetime
-from typing import Dict, Optional
 
 from loguru import logger
 
@@ -194,7 +193,7 @@ def analyze_network(data_path: str = None):
         return None
 
 
-def launch_annotation_tool(limit: int = 100, filter_criteria: Optional[Dict] = None):
+def launch_annotation_tool(limit: int = 100, filter_criteria: dict | None = None):
     """Launch the Gradio annotation interface with database-driven loading"""
     from gradio_app.annotation_interface import AnnotationInterface
 
@@ -205,7 +204,7 @@ def launch_annotation_tool(limit: int = 100, filter_criteria: Optional[Dict] = N
 
 
 def launch_enhanced_annotation_tool(
-    limit: int = 100, filter_criteria: Optional[Dict] = None
+    limit: int = 100, filter_criteria: dict | None = None
 ):
     """Launch the enhanced Gradio annotation interface with database-driven loading"""
     from gradio_app.enhanced_annotation_interface import EnhancedAnnotationInterface
@@ -323,7 +322,7 @@ def main():
 
             from gradio_app.annotation_interface import AnnotationInterface
 
-            with open(args.data_path, "r") as f:
+            with open(args.data_path) as f:
                 legacy_data = json.load(f)
             # Create a legacy interface instance that works with the loaded data
             annotation_tool = AnnotationInterface.__new__(AnnotationInterface)
@@ -360,7 +359,7 @@ def main():
                 EnhancedAnnotationInterface,
             )
 
-            with open(args.data_path, "r") as f:
+            with open(args.data_path) as f:
                 legacy_data = json.load(f)
             # Create a legacy interface instance that works with the loaded data
             annotation_tool = EnhancedAnnotationInterface.__new__(
@@ -408,7 +407,7 @@ def main():
         # Run basic community resilience analysis
         if demo_data:
             # Convert demo data to expected format
-            with open(demo_path, "r") as f:
+            with open(demo_path) as f:
                 data = json.load(f)
 
             # Quick community analysis

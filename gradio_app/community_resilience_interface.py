@@ -4,21 +4,20 @@ Community Resilience & Social Capital Analysis Interface
 Research platform for understanding supportive digital health ecosystems
 """
 
-from typing import Dict, Tuple
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import numpy as np
 from collections import defaultdict
 
 import gradio as gr
+import numpy as np
+import plotly.graph_objects as go
 from loguru import logger
+from plotly.subplots import make_subplots
 
 from config.settings import Config
 from src.data_persistence import DataPersistenceManager
-from src.database_models import RedditPost, RedditComment
+from src.database_models import RedditComment, RedditPost
+from src.health_info_quality import HealthInfoQualityAnalyzer
 from src.network_analysis import NetworkAnalyzer
 from src.translation_service import get_translation_service
-from src.health_info_quality import HealthInfoQualityAnalyzer
 
 
 class CommunityResilienceAnalyzer:
@@ -87,7 +86,7 @@ class CommunityResilienceAnalyzer:
             "understand",
         ]
 
-    def calculate_support_metrics(self) -> Dict:
+    def calculate_support_metrics(self) -> dict:
         """Calculate community support and resilience metrics"""
         with self.db_manager.get_session() as session:
             # Get all posts and comments
@@ -155,7 +154,7 @@ class CommunityResilienceAnalyzer:
 
             return metrics
 
-    def analyze_peer_support_patterns(self) -> Tuple[str, go.Figure]:
+    def analyze_peer_support_patterns(self) -> tuple[str, go.Figure]:
         """Analyze patterns of peer support within communities"""
         with self.db_manager.get_session() as session:
             posts = session.query(RedditPost).all()
@@ -243,7 +242,7 @@ class CommunityResilienceAnalyzer:
 
             return analysis_text, fig
 
-    def analyze_knowledge_brokers(self) -> Tuple[str, go.Figure]:
+    def analyze_knowledge_brokers(self) -> tuple[str, go.Figure]:
         """Identify and analyze knowledge brokers in the community"""
         with self.db_manager.get_session() as session:
             posts = session.query(RedditPost).all()
@@ -401,7 +400,7 @@ class CommunityResilienceAnalyzer:
 
             return analysis_text, fig
 
-    def analyze_cultural_adaptation(self) -> Tuple[str, go.Figure]:
+    def analyze_cultural_adaptation(self) -> tuple[str, go.Figure]:
         """Analyze how health information gets culturally adapted within communities"""
         with self.db_manager.get_session() as session:
             posts = session.query(RedditPost).all()

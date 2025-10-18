@@ -7,12 +7,10 @@ Samples posts from Reddit and tests both the health content classifier and LGBTQ
 import json
 import time
 from datetime import datetime
-from typing import List, Dict
 
-from src.reddit_scraper import RedditScraper
 from src.health_content_classifier import HealthContentClassifier
 from src.lgbtq_content_classifier import LGBTQContentClassifier
-from src.data_persistence import DataPersistenceManager
+from src.reddit_scraper import RedditScraper
 
 
 def test_models_on_reddit_data():
@@ -73,7 +71,7 @@ def test_models_on_reddit_data():
             all_posts.extend(posts)
             print(f"   Collected {len(posts)} posts")
         else:
-            print(f"   No posts found")
+            print("   No posts found")
 
         # Rate limiting
         time.sleep(2)
@@ -223,10 +221,10 @@ def test_models_on_reddit_data():
             f"LGBTQ+-related posts detected: {lgbtq_count}/{len(lgbtq_predictions)} ({(lgbtq_count/len(lgbtq_predictions)*100):.1f}%)"
         )
 
-    print(f"\nNext steps:")
+    print("\nNext steps:")
     print(f"1. Review results in: {results_path}")
-    print(f"2. Train models with collected data if needed")
-    print(f"3. Adjust classification thresholds based on results")
+    print("2. Train models with collected data if needed")
+    print("3. Adjust classification thresholds based on results")
 
     return results
 

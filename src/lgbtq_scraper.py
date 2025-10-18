@@ -6,7 +6,6 @@ Specialized scraper for collecting LGBTQ+-related content from diverse community
 
 import time
 from datetime import datetime
-from typing import Dict, List
 
 from loguru import logger
 
@@ -86,7 +85,7 @@ class LGBTQScraper(RedditScraper):
 
         return False
 
-    def identify_lgbtq_context(self, text: str) -> Dict[str, bool]:
+    def identify_lgbtq_context(self, text: str) -> dict[str, bool]:
         """Identify specific LGBTQ+ contexts in the text"""
         if not text:
             return {}
@@ -128,7 +127,7 @@ class LGBTQScraper(RedditScraper):
 
     def translate_text(
         self, text: str, target_lang: str = "en", source_lang: str = "auto"
-    ) -> Dict:
+    ) -> dict:
         """Translate text using translation service"""
         if self.translation_service:
             return self.translation_service.translate_text(
@@ -146,7 +145,7 @@ class LGBTQScraper(RedditScraper):
 
     def scrape_subreddit_lgbtq(
         self, subreddit_name: str, limit: int = None, skip_existing: bool = True
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """
         Scrape posts from a subreddit with LGBTQ+ focus
         """
@@ -279,7 +278,7 @@ class LGBTQScraper(RedditScraper):
             logger.error(f"Error scraping r/{subreddit_name}: {e}")
             return []
 
-    def extract_comments_lgbtq(self, post) -> List[Dict]:
+    def extract_comments_lgbtq(self, post) -> list[dict]:
         """Extract comments with LGBTQ+ context analysis"""
         comments_data = []
 
@@ -318,7 +317,7 @@ class LGBTQScraper(RedditScraper):
 
         return comments_data
 
-    def _get_primary_context(self, contexts: Dict[str, bool]) -> str:
+    def _get_primary_context(self, contexts: dict[str, bool]) -> str:
         """Determine the primary LGBTQ+ context"""
         # Priority order for contexts
         priority_order = ["gay", "bi", "msm", "general_lgbtq"]
@@ -329,7 +328,7 @@ class LGBTQScraper(RedditScraper):
 
         return "general_lgbtq" if contexts.get("general_lgbtq", False) else "unknown"
 
-    def collect_lgbtq_data(self, save_to_database: bool = None) -> List[Dict]:
+    def collect_lgbtq_data(self, save_to_database: bool = None) -> list[dict]:
         """Collect LGBTQ+ data from all target general population subreddits"""
         if save_to_database is None:
             save_to_database = self.enable_database
@@ -371,7 +370,7 @@ class LGBTQScraper(RedditScraper):
 
         return all_posts
 
-    def get_lgbtq_content_stats(self, posts: List[Dict]) -> Dict:
+    def get_lgbtq_content_stats(self, posts: list[dict]) -> dict:
         """Generate statistics about collected LGBTQ+ content"""
         stats = {
             "total_posts": len(posts),

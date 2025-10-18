@@ -9,7 +9,7 @@ import pickle
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -42,7 +42,7 @@ class LGBTQContentClassifier:
         self.identity_terms = self._get_identity_terms()
         self.context_indicators = self._get_context_indicators()
 
-    def _get_lgbtq_keywords(self) -> List[str]:
+    def _get_lgbtq_keywords(self) -> list[str]:
         """Get comprehensive LGBTQ+ related keywords"""
         return [
             # Core identity terms
@@ -139,7 +139,7 @@ class LGBTQContentClassifier:
             "flaming",
         ]
 
-    def _get_identity_terms(self) -> Dict[str, List[str]]:
+    def _get_identity_terms(self) -> dict[str, list[str]]:
         """Get identity-specific terms for context awareness"""
         return {
             "gay": [
@@ -221,7 +221,7 @@ class LGBTQContentClassifier:
             ],
         }
 
-    def _get_context_indicators(self) -> List[str]:
+    def _get_context_indicators(self) -> list[str]:
         """Get terms that indicate LGBTQ+ context even without direct identity terms"""
         return [
             "sexual orientation",
@@ -350,7 +350,7 @@ class LGBTQContentClassifier:
 
         return df
 
-    def identify_context(self, text: str) -> Dict[str, bool]:
+    def identify_context(self, text: str) -> dict[str, bool]:
         """Identify specific LGBTQ+ contexts in the text"""
         if not text:
             return {}
@@ -446,7 +446,7 @@ class LGBTQContentClassifier:
 
         return text.strip()
 
-    def train_model(self, df: pd.DataFrame) -> Dict[str, Any]:
+    def train_model(self, df: pd.DataFrame) -> dict[str, Any]:
         """Train the LGBTQ+ content classification model"""
         logger.info("Training LGBTQ+ content classifier...")
 
@@ -529,7 +529,7 @@ class LGBTQContentClassifier:
 
         return results
 
-    def predict_lgbtq_content(self, texts: List[str]) -> List[Dict[str, Any]]:
+    def predict_lgbtq_content(self, texts: list[str]) -> list[dict[str, Any]]:
         """Predict whether texts are LGBTQ+-related with context awareness"""
         if not self.pipeline:
             raise ValueError("Model not trained yet. Call train_model() first.")
@@ -539,7 +539,7 @@ class LGBTQContentClassifier:
         probabilities = self.pipeline.predict_proba(processed_texts)
 
         results = []
-        for i, (text, pred, prob) in enumerate(zip(texts, predictions, probabilities)):
+        for i, (text, pred, prob) in enumerate(zip(texts, predictions, probabilities, strict=False)):
             # Get context information
             contexts = self.identify_context(text)
 
@@ -557,7 +557,7 @@ class LGBTQContentClassifier:
 
         return results
 
-    def _get_primary_context(self, contexts: Dict[str, bool]) -> str:
+    def _get_primary_context(self, contexts: dict[str, bool]) -> str:
         """Determine the primary LGBTQ+ context from detected contexts"""
         # Priority order for contexts
         priority_order = ["gay", "bi", "msm", "lesbian", "trans", "general_lgbtq"]
@@ -568,7 +568,7 @@ class LGBTQContentClassifier:
 
         return "general_lgbtq" if contexts.get("general_lgbtq", False) else "unknown"
 
-    def get_top_lgbtq_features(self, n: int = 20) -> List[Tuple[str, float]]:
+    def get_top_lgbtq_features(self, n: int = 20) -> list[tuple[str, float]]:
         """Get the most important features for LGBTQ+ classification"""
         if not self.pipeline:
             return []
@@ -577,7 +577,7 @@ class LGBTQContentClassifier:
         coefficients = self.pipeline.named_steps["classifier"].coef_[0]
 
         # Get top positive coefficients (LGBTQ+-related features)
-        feature_importance = list(zip(feature_names, coefficients))
+        feature_importance = list(zip(feature_names, coefficients, strict=False))
         feature_importance.sort(key=lambda x: x[1], reverse=True)
 
         return feature_importance[:n]

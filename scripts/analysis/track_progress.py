@@ -4,7 +4,6 @@ Simple scraping progress tracker using file-based logging
 """
 
 import json
-import os
 from datetime import datetime
 from pathlib import Path
 
@@ -19,7 +18,7 @@ class ScrapingProgressTracker:
         """Load existing progress data"""
         if self.log_file.exists():
             try:
-                with open(self.log_file, "r") as f:
+                with open(self.log_file) as f:
                     return json.load(f)
             except Exception as e:
                 print(f"Could not load progress file: {e}")

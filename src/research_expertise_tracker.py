@@ -5,9 +5,9 @@ Tracks and develops researcher expertise in different aspects of community resil
 
 import json
 import sqlite3
-from typing import Dict, List
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
+
 from loguru import logger
 
 
@@ -290,7 +290,7 @@ class ResearchExpertiseTracker:
                 ),
             )
 
-    def get_researcher_profile(self, researcher_id: str) -> Dict:
+    def get_researcher_profile(self, researcher_id: str) -> dict:
         """Get comprehensive researcher expertise profile"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -356,7 +356,7 @@ class ResearchExpertiseTracker:
             "expertise_summary": self._generate_expertise_summary(expertise_domains),
         }
 
-    def _generate_expertise_summary(self, expertise_domains: Dict) -> str:
+    def _generate_expertise_summary(self, expertise_domains: dict) -> str:
         """Generate human-readable expertise summary"""
         if not expertise_domains:
             return "New researcher - building expertise profile"
@@ -373,7 +373,7 @@ class ResearchExpertiseTracker:
         else:
             return "Developing expertise across multiple domains"
 
-    def recommend_research_focus(self, researcher_id: str) -> Dict:
+    def recommend_research_focus(self, researcher_id: str) -> dict:
         """Recommend research focus areas based on expertise and gaps"""
         profile = self.get_researcher_profile(researcher_id)
         if "error" in profile:
@@ -428,8 +428,8 @@ class ResearchExpertiseTracker:
         return recommendations
 
     def suggest_research_team(
-        self, research_focus: str, required_domains: List[str]
-    ) -> Dict:
+        self, research_focus: str, required_domains: list[str]
+    ) -> dict:
         """Suggest optimal research team composition"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -495,8 +495,8 @@ class ResearchExpertiseTracker:
         }
 
     def _generate_team_recommendations(
-        self, domain_coverage: Dict, required_domains: List[str]
-    ) -> List[str]:
+        self, domain_coverage: dict, required_domains: list[str]
+    ) -> list[str]:
         """Generate team composition recommendations"""
         recommendations = []
 

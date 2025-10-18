@@ -4,8 +4,9 @@ Creates research-ready visualizations from actual Reddit data to demonstrate piv
 """
 
 import json
-import pandas as pd
+
 import matplotlib.pyplot as plt
+import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -15,13 +16,11 @@ class RealDataResearchDemo:
         # Load real data
         with open(
             "/Users/drjforrest/dev/academicdev/misinformation_gay_mens_Health/data/analytics_report_20250902_063515.json",
-            "r",
         ) as f:
             self.analytics_data = json.load(f)
 
         with open(
             "/Users/drjforrest/dev/academicdev/misinformation_gay_mens_Health/data/raw_reddit_data_20250902_060559.json",
-            "r",
         ) as f:
             self.raw_data = json.load(f)
 

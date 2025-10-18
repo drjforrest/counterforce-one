@@ -19,13 +19,13 @@ def identify_issues():
         print("❌ No collection report found")
         return
 
-    with open(report_file, "r") as f:
+    with open(report_file) as f:
         data = json.load(f)
 
     # Load keyword translations
     keywords_file = Path("data/health_keywords_translations.json")
     if keywords_file.exists():
-        with open(keywords_file, "r") as f:
+        with open(keywords_file) as f:
             keywords_data = json.load(f)
 
     issues = []
@@ -123,7 +123,7 @@ def identify_issues():
 
     # Check keyword translations for specific issues
     if keywords_file.exists():
-        print(f"\n🔤 Keyword Translation Quality Check:")
+        print("\n🔤 Keyword Translation Quality Check:")
         for lang, translations in list(keywords_data.items())[
             :3
         ]:  # Show first 3 languages
@@ -133,7 +133,7 @@ def identify_issues():
                 status = "✅" if eng.lower() != trans.lower() else "⚠️"
                 print(f"    {status} {eng} -> {trans}")
 
-    print(f"\n✅ Analysis complete!")
+    print("\n✅ Analysis complete!")
 
 
 if __name__ == "__main__":

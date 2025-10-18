@@ -5,10 +5,11 @@ Database management utilities for the Health Misinformation Platform
 import os
 import subprocess
 import sys
-from loguru import logger
-from sqlalchemy import create_engine, text
+
 import psycopg2
+from loguru import logger
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from sqlalchemy import create_engine, text
 
 from config.settings import Config
 

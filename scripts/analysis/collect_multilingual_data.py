@@ -4,15 +4,15 @@ Multilingual Data Collection Script with configurable subreddits
 Expands data collection to include diverse language communities and health-related subreddits
 """
 
+import json
 import time
 from datetime import datetime
-from typing import List, Dict
-import json
 from pathlib import Path
+
 from loguru import logger
 
-from src.multilingual_scraper import MultilingualRedditScraper
 from config.settings import ResearchConfig
+from src.multilingual_scraper import MultilingualRedditScraper
 
 
 class MultilingualHealthCollector:
@@ -75,7 +75,7 @@ class MultilingualHealthCollector:
         """Load configuration from JSON file"""
         config_path = Path(config_file)
         if config_path.exists():
-            with open(config_path, "r") as f:
+            with open(config_path) as f:
                 return json.load(f)
         else:
             logger.warning(f"Config file {config_file} not found, using defaults")
@@ -145,7 +145,7 @@ class MultilingualHealthCollector:
         """Load discovered subreddits and add them to the collection list"""
         discovered_path = Path(discovered_file)
         if discovered_path.exists():
-            with open(discovered_path, "r") as f:
+            with open(discovered_path) as f:
                 discovered = json.load(f)
 
             added_count = 0
@@ -161,7 +161,7 @@ class MultilingualHealthCollector:
 
     def collect_targeted_multilingual_data(
         self, posts_per_subreddit: int = 50
-    ) -> Dict[str, any]:
+    ) -> dict[str, any]:
         """Collect data specifically targeting multilingual health discussions"""
 
         logger.info("🌐 Starting targeted multilingual health data collection...")
@@ -229,7 +229,7 @@ class MultilingualHealthCollector:
 
         return collection_results
 
-    def _analyze_subreddit_data(self, posts: List[Dict], subreddit: str) -> Dict:
+    def _analyze_subreddit_data(self, posts: list[dict], subreddit: str) -> dict:
         """Analyze posts from a specific subreddit"""
         analysis = {
             "post_count": len(posts),
@@ -315,7 +315,7 @@ class MultilingualHealthCollector:
 
         return False
 
-    def _update_global_stats(self, collection_results: Dict, subreddit_analysis: Dict):
+    def _update_global_stats(self, collection_results: dict, subreddit_analysis: dict):
         """Update global collection statistics"""
         collection_results["total_posts"] += subreddit_analysis["post_count"]
         collection_results["newcomer_posts"] += subreddit_analysis["newcomer_posts"]
@@ -332,7 +332,7 @@ class MultilingualHealthCollector:
             "translations"
         ]
 
-    def _save_collection_report(self, results: Dict):
+    def _save_collection_report(self, results: dict):
         """Save detailed collection report"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         report_file = f"data/multilingual_collection_report_{timestamp}.json"
@@ -347,7 +347,7 @@ class MultilingualHealthCollector:
 
         logger.info(f"📊 Collection report saved to {report_file}")
 
-    def _log_final_results(self, results: Dict):
+    def _log_final_results(self, results: dict):
         """Log comprehensive final results"""
         logger.info("🎉 Multilingual Collection Complete!")
         logger.info("=" * 50)

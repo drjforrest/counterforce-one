@@ -18,7 +18,7 @@ def analyze_translation_issues():
         print("❌ No keyword translations file found")
         return
 
-    with open(keywords_file, "r") as f:
+    with open(keywords_file) as f:
         keywords_data = json.load(f)
 
     # Identify specific issues
@@ -72,7 +72,7 @@ def analyze_translation_issues():
     # Tagalog issues
     if "tl" in keywords_data:
         tl_translations = keywords_data["tl"]
-        print(f"  Tagalog (tl):")
+        print("  Tagalog (tl):")
         problematic_tl = [
             ("PrEP", tl_translations.get("PrEP")),
             ("ARVs", tl_translations.get("ARVs")),
@@ -90,7 +90,7 @@ def analyze_translation_issues():
     # Spanish issues
     if "es" in keywords_data:
         es_translations = keywords_data["es"]
-        print(f"  Spanish (es):")
+        print("  Spanish (es):")
         problematic_es = [
             ("PrEP", es_translations.get("PrEP")),
             ("doxy", es_translations.get("doxy")),
@@ -107,7 +107,7 @@ def analyze_translation_issues():
     # French issues
     if "fr" in keywords_data:
         fr_translations = keywords_data["fr"]
-        print(f"  French (fr):")
+        print("  French (fr):")
         problematic_fr = [
             ("doxy", fr_translations.get("doxy")),
             ("PEP", fr_translations.get("PEP")),
@@ -121,31 +121,31 @@ def analyze_translation_issues():
                 print(f"    ✅ '{eng}' -> '{trans}'")
 
     # Summary
-    print(f"\n📊 Summary:")
+    print("\n📊 Summary:")
     print(f"  • Total languages analyzed: {len(keywords_data)}")
     print(f"  • Identical translations: {total_identical}")
     print(f"  • Empty translations: {total_empty}")
 
     # Recommendations based on findings
-    print(f"\n💡 Recommendations:")
+    print("\n💡 Recommendations:")
     if total_identical > 0:
         print(
-            f"  • Review translation service configuration for language-specific handling"
+            "  • Review translation service configuration for language-specific handling"
         )
         print(
-            f"  • Consider using specialized medical translation services for health terms"
+            "  • Consider using specialized medical translation services for health terms"
         )
-        print(f"  • Implement validation for translation quality")
+        print("  • Implement validation for translation quality")
 
     if "tl" in keywords_data and len(identical_translations.get("tl", [])) > 3:
         print(
-            f"  • Tagalog translations need special attention - many terms are not properly translated"
+            "  • Tagalog translations need special attention - many terms are not properly translated"
         )
 
     if "es" in keywords_data and len(identical_translations.get("es", [])) > 2:
-        print(f"  • Spanish translations for technical terms need improvement")
+        print("  • Spanish translations for technical terms need improvement")
 
-    print(f"\n✅ Analysis complete!")
+    print("\n✅ Analysis complete!")
 
 
 if __name__ == "__main__":

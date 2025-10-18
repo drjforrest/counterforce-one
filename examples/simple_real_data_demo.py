@@ -3,10 +3,11 @@ Simplified Real Data Visualization - Direct from raw data
 """
 
 import json
+from collections import Counter
+
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from collections import Counter
 
 
 class SimpleRealDataDemo:
@@ -14,7 +15,6 @@ class SimpleRealDataDemo:
         # Load raw data directly
         with open(
             "/Users/drjforrest/dev/academicdev/misinformation_gay_mens_Health/data/raw_reddit_data_20250902_060559.json",
-            "r",
         ) as f:
             self.raw_data = json.load(f)
 
@@ -67,7 +67,7 @@ class SimpleRealDataDemo:
             "Mental_Health": ["anxiety", "depression", "stress", "mental health"],
         }
 
-        keyword_counts = {category: 0 for category in health_keywords}
+        keyword_counts = dict.fromkeys(health_keywords, 0)
         posts_with_health = 0
 
         for post in self.raw_data:

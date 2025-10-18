@@ -3,11 +3,12 @@
 Fix Reddit scraping to capture more health-related discussions
 """
 
-from config.settings import Config, ResearchConfig
-from src.reddit_scraper import RedditScraper
-from src.data_persistence import DataPersistenceManager
 import json
 from datetime import datetime
+
+from config.settings import Config, ResearchConfig
+from src.data_persistence import DataPersistenceManager
+from src.reddit_scraper import RedditScraper
 
 
 def create_enhanced_scraper():

@@ -3,10 +3,12 @@
 Enhanced systematic data collection script
 """
 
-from fix_scraping import create_enhanced_scraper
-from src.data_persistence import DataPersistenceManager
 import json
 from datetime import datetime
+
+from fix_scraping import create_enhanced_scraper
+
+from src.data_persistence import DataPersistenceManager
 
 
 def main():

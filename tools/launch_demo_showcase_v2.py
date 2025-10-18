@@ -4,16 +4,14 @@ Counterforce-One Demo Showcase - Streamlined Version
 Fast-loading interactive demo for stakeholder feedback
 """
 
-import os
-import sys
 import json
+import sys
 from pathlib import Path
 
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 import gradio as gr
-import pandas as pd
 
 # Paths
 VIZ_DIR = project_root / "data" / "demo_visualizations"
@@ -21,10 +19,10 @@ HIGHLIGHT_DIR = project_root / "data" / "demo_highlight_reel"
 
 
 # Load data once at startup
-with open(VIZ_DIR / "dataset_stats.json", 'r') as f:
+with open(VIZ_DIR / "dataset_stats.json") as f:
     STATS = json.load(f)
 
-with open(VIZ_DIR / "post_summaries.json", 'r') as f:
+with open(VIZ_DIR / "post_summaries.json") as f:
     POSTS = json.load(f)
 
 
@@ -73,15 +71,15 @@ def create_post_card(post_idx):
     post = POSTS[post_idx]
 
     severity_emoji = {1: "🟢", 2: "🟡", 3: "🟠", 4: "🔴", 5: "🔴🔴"}
-    emoji = severity_emoji.get(post['severity'], "⚪")
+    emoji = severity_emoji.get(post["severity"], "⚪")
 
     accuracy_emoji = {
         "accurate": "✅",
         "partially_accurate": "⚠️",
         "inaccurate": "❌",
-        "not_applicable": "➖"
+        "not_applicable": "➖",
     }
-    acc_emoji = accuracy_emoji.get(post['accuracy_label'], "")
+    acc_emoji = accuracy_emoji.get(post["accuracy_label"], "")
 
     return f"""
 ## {post['title']}
@@ -210,27 +208,25 @@ PrEP/condoms discussion reveals:
 def launch_showcase():
     """Create and launch showcase"""
 
-    with gr.Blocks(
-        title="Counterforce-One Demo",
-        theme=gr.themes.Soft()
-    ) as demo:
+    with gr.Blocks(title="Counterforce-One Demo", theme=gr.themes.Soft()) as demo:
 
         gr.Markdown(create_overview())
 
         gr.Markdown("---")
         gr.Markdown("## 📊 Subreddit Distribution")
-        gr.HTML(f'<iframe src="file://{VIZ_DIR}/subreddit_distribution.html" width="100%" height="500px"></iframe>')
+        gr.HTML(
+            f'<iframe src="file://{VIZ_DIR}/subreddit_distribution.html" width="100%" height="500px"></iframe>'
+        )
 
         gr.Markdown("---")
         gr.Markdown("## 🔍 Featured Case Studies")
 
         post_selector = gr.Radio(
             choices=[
-                f"Post {i+1}: {POSTS[i]['title'][:60]}..."
-                for i in range(len(POSTS))
+                f"Post {i+1}: {POSTS[i]['title'][:60]}..." for i in range(len(POSTS))
             ],
             label="Select a post to explore",
-            value=f"Post 1: {POSTS[0]['title'][:60]}..."
+            value=f"Post 1: {POSTS[0]['title'][:60]}...",
         )
 
         post_display = gr.Markdown(create_post_card(0))
@@ -239,7 +235,9 @@ def launch_showcase():
             idx = int(selection.split("Post ")[1].split(":")[0]) - 1
             return create_post_card(idx)
 
-        post_selector.change(update_post, inputs=[post_selector], outputs=[post_display])
+        post_selector.change(
+            update_post, inputs=[post_selector], outputs=[post_display]
+        )
 
         gr.Markdown("---")
         gr.Markdown(create_methodology())
@@ -247,7 +245,8 @@ def launch_showcase():
         gr.Markdown("---")
         gr.Markdown(create_findings())
 
-        gr.Markdown("""
+        gr.Markdown(
+            """
 ---
 
 ## 🚀 Next Steps
@@ -286,7 +285,8 @@ def launch_showcase():
         October 2025
     </p>
 </div>
-""")
+"""
+        )
 
     return demo
 
@@ -299,7 +299,9 @@ def main():
     print("🌐 Starting web server...")
     print()
     print(f"📊 Loaded {len(POSTS)} annotated posts")
-    print(f"🕸️  Generated {len(list(VIZ_DIR.glob('network_*.html')))} network visualizations")
+    print(
+        f"🕸️  Generated {len(list(VIZ_DIR.glob('network_*.html')))} network visualizations"
+    )
     print()
     print("🔗 Access at: http://localhost:7860")
     print("📤 Set share=True to get public link for remote feedback")
@@ -309,7 +311,7 @@ def main():
     demo.launch(
         server_port=7860,
         share=False,  # Change to True for public sharing link
-        show_error=True
+        show_error=True,
     )
 
 

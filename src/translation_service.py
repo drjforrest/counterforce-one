@@ -4,11 +4,11 @@ Translation service for multilingual health misinformation detection
 Supports multiple translation backends with caching and fallback mechanisms
 """
 
-import json
 import hashlib
-from typing import Dict, Optional, List
-from pathlib import Path
+import json
 import time
+from pathlib import Path
+
 from loguru import logger
 
 # Translation backends - using deep-translator which is more reliable
@@ -37,11 +37,11 @@ class TranslationCache:
         self.cache_file = self.cache_dir / "translations.json"
         self.cache = self._load_cache()
 
-    def _load_cache(self) -> Dict:
+    def _load_cache(self) -> dict:
         """Load existing cache from disk"""
         if self.cache_file.exists():
             try:
-                with open(self.cache_file, "r", encoding="utf-8") as f:
+                with open(self.cache_file, encoding="utf-8") as f:
                     return json.load(f)
             except Exception as e:
                 logger.warning(f"Could not load translation cache: {e}")
@@ -60,7 +60,7 @@ class TranslationCache:
         content = f"{text}:{source_lang}:{target_lang}"
         return hashlib.md5(content.encode()).hexdigest()
 
-    def get(self, text: str, source_lang: str, target_lang: str) -> Optional[str]:
+    def get(self, text: str, source_lang: str, target_lang: str) -> str | None:
         """Get cached translation"""
         key = self._generate_key(text, source_lang, target_lang)
         return self.cache.get(key)
@@ -136,7 +136,7 @@ class TranslationService:
             except Exception as e:
                 logger.warning(f"Could not initialize MyMemory Translator: {e}")
 
-    def _get_available_backends(self) -> List[str]:
+    def _get_available_backends(self) -> list[str]:
         """Get list of available translation backends"""
         backends = []
         if self.google_translator:
@@ -171,7 +171,7 @@ class TranslationService:
 
     def translate_text(
         self, text: str, target_lang: str = "en", source_lang: str = "auto"
-    ) -> Dict:
+    ) -> dict:
         """
         Translate text with fallback across multiple backends
 
@@ -258,7 +258,7 @@ class TranslationService:
 
     def _translate_googletrans(
         self, text: str, source_lang: str, target_lang: str
-    ) -> Dict:
+    ) -> dict:
         """Translate using googletrans library"""
         if not self.google_translator:
             raise Exception("Google Translate not available")
@@ -289,7 +289,7 @@ class TranslationService:
 
     def _translate_deep_google(
         self, text: str, source_lang: str, target_lang: str
-    ) -> Dict:
+    ) -> dict:
         """Translate using deep-translator Google backend"""
         if "google" not in self.deep_translators:
             raise Exception("Deep Google Translator not available")
@@ -308,7 +308,7 @@ class TranslationService:
 
     def _translate_mymemory(
         self, text: str, source_lang: str, target_lang: str
-    ) -> Dict:
+    ) -> dict:
         """Translate using MyMemory backend"""
         if "mymemory" not in self.deep_translators:
             raise Exception("MyMemory Translator not available")
@@ -325,7 +325,7 @@ class TranslationService:
             "confidence": 0.7,  # MyMemory tends to be less reliable
         }
 
-    def translate_health_keywords(self) -> Dict[str, Dict[str, str]]:
+    def translate_health_keywords(self) -> dict[str, dict[str, str]]:
         """
         Translate health keywords to all target languages
         Returns nested dict: {language: {english_keyword: translated_keyword}}
@@ -377,7 +377,7 @@ class TranslationService:
         logger.info(f"Health keyword translations saved to {translation_file}")
         return translations
 
-    def get_health_keywords_multilingual(self) -> List[str]:
+    def get_health_keywords_multilingual(self) -> list[str]:
         """
         Get all health keywords in all languages
         Returns a flat list of keywords for matching
@@ -394,7 +394,7 @@ class TranslationService:
         translation_file = Path("data/health_keywords_translations.json")
         if translation_file.exists():
             try:
-                with open(translation_file, "r", encoding="utf-8") as f:
+                with open(translation_file, encoding="utf-8") as f:
                     translations = json.load(f)
 
                 for lang_translations in translations.values():

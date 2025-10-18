@@ -2,21 +2,22 @@
 Enhanced database models with pgvector support for semantic analysis
 """
 
+from datetime import datetime
+
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
-    create_engine,
+    Boolean,
     Column,
+    DateTime,
+    Float,
+    ForeignKey,
     Integer,
     String,
     Text,
-    DateTime,
-    Boolean,
-    Float,
-    ForeignKey,
+    create_engine,
 )
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
-from pgvector.sqlalchemy import Vector
-from datetime import datetime
+from sqlalchemy.orm import relationship, sessionmaker
 
 Base = declarative_base()
 

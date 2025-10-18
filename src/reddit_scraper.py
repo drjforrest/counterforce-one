@@ -2,14 +2,14 @@
 Reddit data collection module for health misinformation research
 """
 
-import praw
-import pandas as pd
 import json
+import time
 from datetime import datetime
-from typing import List, Dict
+
+import pandas as pd
+import praw
 from langdetect import detect
 from loguru import logger
-import time
 
 from config.settings import Config, ResearchConfig
 from src.data_persistence import DataPersistenceManager
@@ -77,7 +77,7 @@ class RedditScraper:
 
     def scrape_subreddit(
         self, subreddit_name: str, limit: int = None, skip_existing: bool = True
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """
         Scrape posts from a specific subreddit
 
@@ -161,7 +161,7 @@ class RedditScraper:
             logger.error(f"Error scraping r/{subreddit_name}: {e}")
             return []
 
-    def extract_comments(self, post) -> List[Dict]:
+    def extract_comments(self, post) -> list[dict]:
         """Extract comments from a post for network analysis"""
         comments_data = []
 

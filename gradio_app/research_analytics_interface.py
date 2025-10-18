@@ -5,17 +5,16 @@ Comprehensive investigational features for research teams
 """
 
 from datetime import datetime, timedelta
-from typing import Optional, Tuple
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 
 import gradio as gr
+import plotly.graph_objects as go
 from loguru import logger
+from plotly.subplots import make_subplots
 
 from config.settings import Config
-from src.data_persistence import DataPersistenceManager
-from src.database_models import RedditPost, RedditComment, HumanAnnotation
 from src.analytics_dashboard import HealthMisinformationAnalytics
+from src.data_persistence import DataPersistenceManager
+from src.database_models import HumanAnnotation, RedditComment, RedditPost
 from src.network_analysis import NetworkAnalyzer
 from src.translation_service import get_translation_service
 
@@ -34,7 +33,7 @@ class ResearchAnalyticsInterface:
         # Load data
         self.analytics.load_data()
 
-    def get_data_overview(self) -> Tuple[str, dict]:
+    def get_data_overview(self) -> tuple[str, dict]:
         """Get comprehensive data overview with statistics"""
         with self.db_manager.get_session() as session:
             # Basic counts
@@ -156,7 +155,7 @@ class ResearchAnalyticsInterface:
             return fig
 
     def create_network_visualization(
-        self, subreddit_filter: Optional[str] = None
+        self, subreddit_filter: str | None = None
     ) -> go.Figure:
         """Create network analysis visualization"""
         try:
@@ -270,7 +269,7 @@ class ResearchAnalyticsInterface:
 
             return results_text
 
-    def analyze_misinformation_patterns(self) -> Tuple[str, go.Figure]:
+    def analyze_misinformation_patterns(self) -> tuple[str, go.Figure]:
         """Analyze patterns in misinformation spread"""
         with self.db_manager.get_session() as session:
             # Get posts with human annotations
@@ -352,7 +351,7 @@ class ResearchAnalyticsInterface:
             subs, sub_counts = zip(
                 *sorted(
                     patterns["by_subreddit"].items(), key=lambda x: x[1], reverse=True
-                )
+                ), strict=False
             )
             fig.add_trace(
                 go.Bar(x=list(subs), y=list(sub_counts), name="Subreddits"),
@@ -361,7 +360,7 @@ class ResearchAnalyticsInterface:
             )
 
             # Language distribution
-            langs, lang_counts = zip(*patterns["by_language"].items())
+            langs, lang_counts = zip(*patterns["by_language"].items(), strict=False)
             fig.add_trace(
                 go.Pie(labels=list(langs), values=list(lang_counts), name="Languages"),
                 row=1,
@@ -370,7 +369,7 @@ class ResearchAnalyticsInterface:
 
             # Topic distribution
             topics, topic_counts = zip(
-                *sorted(patterns["by_topic"].items(), key=lambda x: x[1], reverse=True)
+                *sorted(patterns["by_topic"].items(), key=lambda x: x[1], reverse=True), strict=False
             )
             fig.add_trace(
                 go.Bar(x=list(topics), y=list(topic_counts), name="Topics"),
@@ -379,7 +378,7 @@ class ResearchAnalyticsInterface:
             )
 
             # Severity distribution
-            sevs, sev_counts = zip(*patterns["by_severity"].items())
+            sevs, sev_counts = zip(*patterns["by_severity"].items(), strict=False)
             fig.add_trace(
                 go.Pie(labels=list(sevs), values=list(sev_counts), name="Severity"),
                 row=2,

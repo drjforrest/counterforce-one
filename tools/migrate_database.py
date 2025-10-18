@@ -3,8 +3,9 @@
 Database migration script to add english_translation columns to existing tables
 """
 
-from sqlalchemy import create_engine, text
 from loguru import logger
+from sqlalchemy import create_engine, text
+
 from config.settings import Config
 
 

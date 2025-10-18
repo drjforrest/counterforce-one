@@ -45,7 +45,7 @@ def test_improvements():
         )
 
     # Test with different backends if available
-    print(f"\n🔄 Testing different translation backends:")
+    print("\n🔄 Testing different translation backends:")
 
     # Test a few terms with different backends
     test_terms = ["PrEP", "ARVs", "doxy"]
@@ -66,14 +66,14 @@ def test_improvements():
     service.close()
 
     # Recommendations for improvement
-    print(f"\n💡 Improvement Recommendations:")
-    print(f"  1. Create language-specific health term dictionaries")
-    print(f"  2. Implement manual validation for technical terms")
-    print(f"  3. Consider using specialized medical translation APIs")
-    print(f"  4. Add fallback mechanisms for poor quality translations")
-    print(f"  5. Implement confidence threshold filtering")
+    print("\n💡 Improvement Recommendations:")
+    print("  1. Create language-specific health term dictionaries")
+    print("  2. Implement manual validation for technical terms")
+    print("  3. Consider using specialized medical translation APIs")
+    print("  4. Add fallback mechanisms for poor quality translations")
+    print("  5. Implement confidence threshold filtering")
 
-    print(f"\n✅ Testing complete!")
+    print("\n✅ Testing complete!")
 
 
 if __name__ == "__main__":

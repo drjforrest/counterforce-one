@@ -3,10 +3,12 @@
 Subreddit Discovery Tool - Find new relevant subreddits for health research
 """
 
-import praw
-from config.settings import Config
 import json
 from pathlib import Path
+
+import praw
+
+from config.settings import Config
 
 
 class SubredditDiscovery:

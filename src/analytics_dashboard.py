@@ -9,7 +9,7 @@ import re
 from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import plotly.express as px
 import plotly.graph_objects as go
@@ -76,7 +76,7 @@ class HealthMisinformationAnalytics:
                 logger.warning(f"Could not load LGBTQ+ ML classifier: {e}")
                 self.lgbtq_classifier = None
 
-    def load_data(self) -> Dict[str, int]:
+    def load_data(self) -> dict[str, int]:
         """Load all posts and comments from database"""
         logger.info("Loading data for analytics...")
 
@@ -138,7 +138,7 @@ class HealthMisinformationAnalytics:
         )
         return stats
 
-    def analyze_language_distribution(self) -> Dict[str, Any]:
+    def analyze_language_distribution(self) -> dict[str, Any]:
         """Analyze language distribution across posts and comments"""
 
         # Posts by language
@@ -171,7 +171,7 @@ class HealthMisinformationAnalytics:
             ),
         }
 
-    def analyze_health_keywords(self) -> Dict[str, Any]:
+    def analyze_health_keywords(self) -> dict[str, Any]:
         """Analyze health keyword usage across posts"""
 
         # Health keywords from config
@@ -227,7 +227,7 @@ class HealthMisinformationAnalytics:
             "posts_with_keywords_data": posts_with_keywords,
         }
 
-    def analyze_subreddit_patterns(self) -> Dict[str, Any]:
+    def analyze_subreddit_patterns(self) -> dict[str, Any]:
         """Analyze patterns across different subreddits"""
 
         subreddit_stats = defaultdict(
@@ -277,7 +277,7 @@ class HealthMisinformationAnalytics:
 
         return dict(subreddit_stats)
 
-    def analyze_temporal_patterns(self) -> Dict[str, Any]:
+    def analyze_temporal_patterns(self) -> dict[str, Any]:
         """Analyze temporal patterns in posts"""
 
         # Convert dates and analyze
@@ -314,7 +314,7 @@ class HealthMisinformationAnalytics:
             },
         }
 
-    def analyze_newcomer_content(self) -> Dict[str, Any]:
+    def analyze_newcomer_content(self) -> dict[str, Any]:
         """Analyze content specifically related to newcomers"""
 
         newcomer_posts = [p for p in self.posts_data if p["is_newcomer_related"]]
@@ -349,7 +349,7 @@ class HealthMisinformationAnalytics:
             "newcomer_subreddits": dict(newcomer_subreddits),
         }
 
-    def generate_insights(self) -> Dict[str, List[str]]:
+    def generate_insights(self) -> dict[str, list[str]]:
         """Generate actionable insights for research teams"""
 
         insights = {
@@ -445,7 +445,7 @@ class HealthMisinformationAnalytics:
 
         return insights
 
-    def create_visualizations(self) -> Dict[str, go.Figure]:
+    def create_visualizations(self) -> dict[str, go.Figure]:
         """Create comprehensive visualizations for the dashboard"""
 
         figures = {}
@@ -709,7 +709,7 @@ class HealthMisinformationAnalytics:
 
     def get_keyword_context(
         self, keyword: str, max_examples: int = 5
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Get example posts/comments containing specific keywords with context"""
         examples = []
         keyword_lower = keyword.lower()
@@ -798,7 +798,7 @@ class HealthMisinformationAnalytics:
 
         return context
 
-    def get_recent_posts_preview(self, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_recent_posts_preview(self, limit: int = 10) -> list[dict[str, Any]]:
         """Get preview of recent posts for transparency"""
         # Sort posts by creation date
         sorted_posts = sorted(
@@ -827,7 +827,7 @@ class HealthMisinformationAnalytics:
 
         return preview
 
-    def analyze_ml_health_classification(self) -> Dict[str, Any]:
+    def analyze_ml_health_classification(self) -> dict[str, Any]:
         """Analyze content using trained ML model"""
         if not self.ml_classifier:
             return {"model_available": False, "message": "ML classifier not available"}
@@ -903,7 +903,7 @@ class HealthMisinformationAnalytics:
             },
         }
 
-    def analyze_ml_lgbtq_classification(self) -> Dict[str, Any]:
+    def analyze_ml_lgbtq_classification(self) -> dict[str, Any]:
         """Analyze content using trained LGBTQ+ ML model"""
         if not self.lgbtq_classifier:
             return {

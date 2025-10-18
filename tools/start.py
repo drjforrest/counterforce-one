@@ -6,8 +6,8 @@ Handles all initialization and setup automatically
 """
 
 import os
-import sys
 import subprocess
+import sys
 
 
 def check_python_version():

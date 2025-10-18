@@ -3,9 +3,10 @@
 Analyze community responses and interactions in the collected data
 """
 
-from src.data_persistence import DataPersistenceManager
-from src.database_models import RedditPost, RedditComment
 from collections import Counter
+
+from src.data_persistence import DataPersistenceManager
+from src.database_models import RedditComment, RedditPost
 
 
 def analyze_community_responses():
@@ -20,13 +21,13 @@ def analyze_community_responses():
     total_comments = session.query(RedditComment).count()
     total_posts = session.query(RedditPost).count()
 
-    print(f"📊 Overview:")
+    print("📊 Overview:")
     print(f"  Total posts: {total_posts}")
     print(f"  Total comments: {total_comments}")
     print(f"  Average comments per post: {total_comments/total_posts:.1f}")
 
     # Analyze comment engagement by subreddit
-    print(f"\n💬 Comment Engagement by Subreddit:")
+    print("\n💬 Comment Engagement by Subreddit:")
     subreddit_comments = {}
 
     for post in session.query(RedditPost).all():
@@ -53,7 +54,7 @@ def analyze_community_responses():
         )
 
     # Show sample community responses
-    print(f"\n🗣️  Sample Community Responses:")
+    print("\n🗣️  Sample Community Responses:")
 
     # Get posts with most comments
     popular_posts = []
@@ -88,7 +89,7 @@ def analyze_community_responses():
             print(f"   RESPONSE {j+1} (score: {comment.score}): {comment_preview}")
 
     # Analyze response patterns
-    print(f"\n📈 Response Patterns:")
+    print("\n📈 Response Patterns:")
 
     # Comment length analysis
     comment_lengths = []
@@ -107,7 +108,7 @@ def analyze_community_responses():
         print(f"  Average comment score: {avg_score:.1f}")
 
     # Find most active commenters
-    print(f"\n👥 Most Active Community Members:")
+    print("\n👥 Most Active Community Members:")
     author_counts = Counter()
 
     for comment in session.query(RedditComment).all():
@@ -118,7 +119,7 @@ def analyze_community_responses():
         print(f"  {author}: {count} comments")
 
     # Health-related discussion analysis
-    print(f"\n🏥 Health-Related Community Discussions:")
+    print("\n🏥 Health-Related Community Discussions:")
     health_keywords = [
         "health",
         "doctor",
@@ -154,7 +155,7 @@ def analyze_community_responses():
     )
 
     # Sample health-related responses
-    print(f"\n💊 Sample Health-Related Community Responses:")
+    print("\n💊 Sample Health-Related Community Responses:")
     health_response_count = 0
 
     for comment in session.query(RedditComment).limit(2000).all():
@@ -174,12 +175,12 @@ def analyze_community_responses():
 
     session.close()
 
-    print(f"\n" + "=" * 50)
-    print(f"✅ Community Response Analysis Complete!")
+    print("\n" + "=" * 50)
+    print("✅ Community Response Analysis Complete!")
     print(
         f"💡 You have substantial community discussion data with {total_comments} responses"
     )
-    print(f"   to analyze for community resilience and peer support patterns.")
+    print("   to analyze for community resilience and peer support patterns.")
 
 
 if __name__ == "__main__":

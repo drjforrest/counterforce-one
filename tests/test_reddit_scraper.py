@@ -2,10 +2,11 @@
 Tests for Reddit scraper functionality
 """
 
-import pytest
-from unittest.mock import Mock, patch
 import sys
 from pathlib import Path
+from unittest.mock import patch
+
+import pytest
 
 # Add project root to path
 project_root = Path(__file__).parent.parent
@@ -81,7 +82,7 @@ class TestConfigurationValidation:
         env_example_path = project_root / ".env.example"
         assert env_example_path.exists(), ".env.example should exist"
 
-        with open(env_example_path, "r") as f:
+        with open(env_example_path) as f:
             content = f.read()
 
         required_vars = [
@@ -123,7 +124,7 @@ class TestProjectStructure:
         assert main_path.exists(), "main.py should exist"
 
         # Basic syntax check
-        with open(main_path, "r") as f:
+        with open(main_path) as f:
             content = f.read()
 
         # Should not raise syntax errors
@@ -137,7 +138,7 @@ class TestProjectStructure:
         req_path = project_root / "requirements.txt"
         assert req_path.exists(), "requirements.txt should exist"
 
-        with open(req_path, "r") as f:
+        with open(req_path) as f:
             lines = f.readlines()
 
         # Should have some dependencies

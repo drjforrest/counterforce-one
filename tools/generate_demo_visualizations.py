@@ -4,38 +4,39 @@ Generate all visualizations needed for the demo showcase website
 Creates network graphs, statistics, and visual assets
 """
 
-import os
-import sys
 import json
+import sys
 from pathlib import Path
 
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-import pandas as pd
 import networkx as nx
+import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
 from loguru import logger
+
 from src.data_persistence import DataPersistenceManager
-from src.database_models import RedditPost, RedditComment
+from src.database_models import RedditComment, RedditPost
 
 # Output directory for visualizations
 OUTPUT_DIR = project_root / "data" / "demo_visualizations"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-KEY_POSTS = ['1ls1tyz', '1lyphrb', '1la8c64', '1lhs70z']
+KEY_POSTS = ["1ls1tyz", "1lyphrb", "1la8c64", "1lhs70z"]
 
 
-def create_comment_network_visualization(post_id: str, post_title: str, db_manager) -> str:
+def create_comment_network_visualization(
+    post_id: str, post_title: str, db_manager
+) -> str:
     """Create network visualization for a single post's comment threads"""
     logger.info(f"Creating network for post: {post_id}")
 
     with db_manager.get_session() as session:
         # Get comments for this post
-        comments = session.query(RedditComment).filter(
-            RedditComment.post_id == post_id
-        ).all()
+        comments = (
+            session.query(RedditComment).filter(RedditComment.post_id == post_id).all()
+        )
 
         if not comments:
             logger.warning(f"No comments found for post {post_id}")
@@ -57,20 +58,22 @@ def create_comment_network_visualization(post_id: str, post_title: str, db_manag
                     type="comment",
                     author=comment.author,
                     score=comment.score or 0,
-                    label=comment.body[:100] if comment.body else ""
+                    label=comment.body[:100] if comment.body else "",
                 )
                 comment_lookup[comment.comment_id] = comment
 
                 # Add edge from parent
                 if comment.parent_id:
-                    if comment.parent_id.startswith('t3_'):  # Reply to post
+                    if comment.parent_id.startswith("t3_"):  # Reply to post
                         G.add_edge("POST", node_id)
-                    elif comment.parent_id.startswith('t1_'):  # Reply to comment
+                    elif comment.parent_id.startswith("t1_"):  # Reply to comment
                         parent_id = comment.parent_id[3:]  # Remove t1_ prefix
                         if parent_id in comment_lookup:
                             G.add_edge(parent_id, node_id)
 
-        logger.info(f"Network has {G.number_of_nodes()} nodes and {G.number_of_edges()} edges")
+        logger.info(
+            f"Network has {G.number_of_nodes()} nodes and {G.number_of_edges()} edges"
+        )
 
         # Calculate layout
         pos = nx.spring_layout(G, k=2, iterations=50)
@@ -85,10 +88,11 @@ def create_comment_network_visualization(post_id: str, post_title: str, db_manag
             edge_y.extend([y0, y1, None])
 
         edge_trace = go.Scatter(
-            x=edge_x, y=edge_y,
-            line=dict(width=0.5, color='#888'),
-            hoverinfo='none',
-            mode='lines'
+            x=edge_x,
+            y=edge_y,
+            line=dict(width=0.5, color="#888"),
+            hoverinfo="none",
+            mode="lines",
         )
 
         # Node traces
@@ -106,41 +110,44 @@ def create_comment_network_visualization(post_id: str, post_title: str, db_manag
             if node == "POST":
                 node_text.append(f"Original Post<br>{post_title[:80]}")
                 node_size.append(30)
-                node_color.append('#ff4444')
+                node_color.append("#ff4444")
             else:
                 node_data = G.nodes[node]
-                score = node_data.get('score', 0)
-                author = node_data.get('author', 'unknown')
-                label = node_data.get('label', '')[:80]
+                score = node_data.get("score", 0)
+                author = node_data.get("author", "unknown")
+                label = node_data.get("label", "")[:80]
                 node_text.append(f"Author: {author}<br>Score: {score}<br>{label}...")
-                node_size.append(10 + min(max(score, 0) * 2, 20))  # Size by score (min 0)
-                node_color.append('#4477ff')
+                node_size.append(
+                    10 + min(max(score, 0) * 2, 20)
+                )  # Size by score (min 0)
+                node_color.append("#4477ff")
 
         node_trace = go.Scatter(
-            x=node_x, y=node_y,
-            mode='markers',
-            hoverinfo='text',
+            x=node_x,
+            y=node_y,
+            mode="markers",
+            hoverinfo="text",
             text=node_text,
             marker=dict(
-                size=node_size,
-                color=node_color,
-                line=dict(width=1, color='white')
-            )
+                size=node_size, color=node_color, line=dict(width=1, color="white")
+            ),
         )
 
         # Create figure
         fig = go.Figure(
             data=[edge_trace, node_trace],
             layout=go.Layout(
-                title=dict(text=f"Comment Network: {post_title[:60]}...", font=dict(size=16)),
+                title=dict(
+                    text=f"Comment Network: {post_title[:60]}...", font=dict(size=16)
+                ),
                 showlegend=False,
-                hovermode='closest',
+                hovermode="closest",
                 margin=dict(b=20, l=5, r=5, t=40),
                 xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                 yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-                plot_bgcolor='white',
-                height=600
-            )
+                plot_bgcolor="white",
+                height=600,
+            ),
         )
 
         # Save
@@ -173,32 +180,34 @@ def create_dataset_overview():
         }
 
         # Top subreddits
-        subreddit_counts = pd.DataFrame([
-            {"subreddit": p.subreddit} for p in posts if p.subreddit
-        ])
-        top_subreddits = subreddit_counts['subreddit'].value_counts().head(10)
+        subreddit_counts = pd.DataFrame(
+            [{"subreddit": p.subreddit} for p in posts if p.subreddit]
+        )
+        top_subreddits = subreddit_counts["subreddit"].value_counts().head(10)
 
         # Create bar chart
-        fig = go.Figure(data=[
-            go.Bar(
-                x=top_subreddits.index,
-                y=top_subreddits.values,
-                marker_color='#4477ff'
-            )
-        ])
+        fig = go.Figure(
+            data=[
+                go.Bar(
+                    x=top_subreddits.index,
+                    y=top_subreddits.values,
+                    marker_color="#4477ff",
+                )
+            ]
+        )
 
         fig.update_layout(
             title="Top 10 Subreddits by Post Count",
             xaxis_title="Subreddit",
             yaxis_title="Number of Posts",
-            plot_bgcolor='white',
-            height=400
+            plot_bgcolor="white",
+            height=400,
         )
 
         fig.write_html(str(OUTPUT_DIR / "subreddit_distribution.html"))
 
         # Save stats as JSON
-        with open(OUTPUT_DIR / "dataset_stats.json", 'w') as f:
+        with open(OUTPUT_DIR / "dataset_stats.json", "w") as f:
             json.dump(stats, f, indent=2)
 
         logger.success(f"Dataset statistics: {stats}")
@@ -210,34 +219,40 @@ def create_post_summary_cards():
     logger.info("Creating post summary cards")
 
     db_manager = DataPersistenceManager()
-    annotations_df = pd.read_csv(project_root / "data/demo_highlight_reel/annotation_template_RECOMMENDED.csv")
+    annotations_df = pd.read_csv(
+        project_root / "data/demo_highlight_reel/annotation_template_RECOMMENDED.csv"
+    )
 
     summaries = []
 
     with db_manager.get_session() as session:
         for post_id in KEY_POSTS:
-            post = session.query(RedditPost).filter(RedditPost.post_id == post_id).first()
-            comments_count = session.query(RedditComment).filter(
-                RedditComment.post_id == post_id
-            ).count()
+            post = (
+                session.query(RedditPost).filter(RedditPost.post_id == post_id).first()
+            )
+            comments_count = (
+                session.query(RedditComment)
+                .filter(RedditComment.post_id == post_id)
+                .count()
+            )
 
-            annotation = annotations_df[annotations_df['post_id'] == post_id].iloc[0]
+            annotation = annotations_df[annotations_df["post_id"] == post_id].iloc[0]
 
             summary = {
                 "post_id": post_id,
                 "title": post.title if post else "Unknown",
                 "score": int(post.score) if post and post.score else 0,
                 "comments": int(comments_count),
-                "annotation_type": str(annotation['annotation_type']),
-                "accuracy_label": str(annotation['accuracy_label']),
-                "severity": int(annotation['severity']),
-                "community_response": str(annotation['community_response']),
-                "notes": str(annotation['notes'])
+                "annotation_type": str(annotation["annotation_type"]),
+                "accuracy_label": str(annotation["accuracy_label"]),
+                "severity": int(annotation["severity"]),
+                "community_response": str(annotation["community_response"]),
+                "notes": str(annotation["notes"]),
             }
             summaries.append(summary)
 
     # Save as JSON
-    with open(OUTPUT_DIR / "post_summaries.json", 'w') as f:
+    with open(OUTPUT_DIR / "post_summaries.json", "w") as f:
         json.dump(summaries, f, indent=2)
 
     logger.success(f"Created {len(summaries)} post summaries")
@@ -268,9 +283,13 @@ def main():
     print("🕸️  Step 3: Network Visualizations")
     with db_manager.get_session() as session:
         for post_id in KEY_POSTS:
-            post = session.query(RedditPost).filter(RedditPost.post_id == post_id).first()
+            post = (
+                session.query(RedditPost).filter(RedditPost.post_id == post_id).first()
+            )
             if post:
-                result = create_comment_network_visualization(post_id, post.title, db_manager)
+                result = create_comment_network_visualization(
+                    post_id, post.title, db_manager
+                )
                 if result:
                     print(f"  ✓ {post.title[:50]}...")
 
