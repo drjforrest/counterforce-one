@@ -1,0 +1,124 @@
+site_name: Counterforce-One Documentation
+site_description: Community-centered platform for health misinformation detection and resilience analysis in immigrant communities
+site_author: Research Team
+site_url: https://health-misinformation-platform.github.io/
+
+repo_name: counterforce-one
+repo_url: https://github.com/research-team/counterforce-one
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+  
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+  
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+plugins:
+  - search:
+      lang: en
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_category_heading: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: installation.md
+    - Configuration: configuration.md
+    - Quick Start: quickstart.md
+  - User Guide:
+    - Data Collection: guides/data-collection.md
+    - Analysis Tools: guides/analysis.md
+    - Annotation Interface: guides/annotation.md
+    - Visualization: guides/visualization.md
+  - Research:
+    - Methodology: research/methodology.md
+    - Ethics & Privacy: research/ethics.md
+    - Data Pipeline: research/data-pipeline.md
+    - Community Analysis: research/community-analysis.md
+  - API Reference:
+    - Core Modules: api/
+  - Development:
+    - Contributing: contributing.md
+    - Testing: development/testing.md
+    - Architecture: development/architecture.md
+  - Examples:
+    - Basic Usage: examples/basic-usage.md
+    - Advanced Workflows: examples/advanced-workflows.md
+    - Research Scenarios: examples/research-scenarios.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/research-team/health-misinformation-platform
+  version:
+    provider: mike
+    default: stable
+
+extra_css:
+  - stylesheets/extra.css
